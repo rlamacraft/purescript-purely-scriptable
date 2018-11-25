@@ -11,8 +11,6 @@ import Effect.Class (liftEffect)
 
 foreign import argsText :: String
 
-foreign import data Response :: Type
-
 presentAlert :: forall btnType . Show btnType => Alert btnType -> Aff (Button btnType)
 presentAlert alert = liftEffect (presentAlertImpl alert) >>= toAff
 
