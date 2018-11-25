@@ -1,9 +1,10 @@
 {
   "name": "purescript-purely-scriptable",
   "homepage": "https://github.com/rlamacraft/purescript-purely-scriptable",
-  "authors": [
-    "Robert <rlamacraft@gmail.com>"
-  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/rlamacraft/purescript-purely-scriptable.git"
+  },
   "description": "PureScript library for interfacing with the APIs exposed by the Scriptable iOS app",
   "main": "",
   "license": "MIT",
