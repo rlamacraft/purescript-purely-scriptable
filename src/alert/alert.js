@@ -1,7 +1,5 @@
 "use strict";
 
-exports.argsText = args.plainTexts[0];
-
 function listOfButtons(buttons) {
   if(Object.keys(buttons).length === 0) {
     return [];
