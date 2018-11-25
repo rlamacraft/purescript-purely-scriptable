@@ -9,6 +9,9 @@
   "main": "",
   "license": "MIT",
   "private": true,
+  "dependencies": {
+    "purescript-aff-promise": "2.0.1"
+  },
   "ignore": [
     "**/.*",
     "node_modules",
