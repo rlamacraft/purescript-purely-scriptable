@@ -10,7 +10,8 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "purescript-aff-promise": "2.0.1"
+    "purescript-aff-promise": "2.0.1",
+    "purescript-prelude": "^4.1.0"
   },
   "ignore": [
     "**/.*",
