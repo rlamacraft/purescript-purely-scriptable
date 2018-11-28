@@ -41,7 +41,7 @@ exports.presentAlertImpl = function(btnType) {
 
 /**
   This is necessary because the Scriptable app does not have a defintion for setTimeout.
-  If the timer is actuualy needed it will need to be polyfilled, somehow. Not sure how.
+  If the timer is actualy needed it will need to be polyfilled, somehow. Not sure how.
 */
 exports.setTimeout = function(f, _) {
   f();
