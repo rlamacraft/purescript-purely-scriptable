@@ -1,7 +1,5 @@
 module PurelyScriptable.Alert (newAlert, presentAlert, setMessage, setTitle, addAction, Alert, Button(..)) where
 
-import Prelude
-
 import Control.Promise (Promise, toAff)
 import Data.List (List(Nil), (:))
 import Data.Maybe (Maybe(..))
@@ -15,11 +13,19 @@ presentAlert alert = liftEffect (presentAlertImpl alert) >>= toAff
 foreign import presentAlertImpl :: forall btnType . Show btnType => Alert btnType -> Effect (Promise (Button btnType))
 
 newtype Button btnType = Button btnType
+type TextField = { placeholder :: Maybe String
+                   text :: Maybe String
+                 }
 
 instance showButton :: Show btnType => Show (Button btnType) where
   show (Button btnValue) = "Button<" <> show btnValue <> ">"
 
-type Alert btnType = { message :: Maybe String, title :: Maybe String, buttons :: List (Button btnType), btnLabels :: List String}
+type Alert btnType = { message :: Maybe String,
+                       title :: Maybe String,
+                       buttons :: List (Button btnType),
+                       btnLabels :: List String,
+                       textFields :: List TextField
+                     }
 
 newAlert :: forall btnType . Alert btnType
 newAlert = {message : Nothing, title : Nothing, buttons : Nil, btnLabels : Nil}
@@ -32,3 +38,6 @@ setTitle title alert = alert { title = Just title }
 
 addAction :: forall btnType . Show btnType => Button btnType -> Alert btnType -> Alert btnType
 addAction btn@(Button btnValue) alert = alert { buttons = btn:alert.buttons, btnLabels = (show btnValue):alert.btnLabels}
+
+addTextField :: forall btnType . TextField -> Alert btnType -> Alert btnType
+addTextField textField alert = alert { textFields = textField:alert.textFields }
