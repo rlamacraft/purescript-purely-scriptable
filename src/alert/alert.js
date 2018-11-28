@@ -1,17 +1,17 @@
 "use strict";
 
-function listOfButtons(buttons) {
-  if(Object.keys(buttons).length === 0) {
+function purescriptListToJsArray(list) {
+  if(Object.keys(list).length === 0) { // == {}
     return [];
   } else {
-    const list = listOfButtons(buttons["value1"]);
-    list.push(buttons["value0"]);
-    return list;
+    const array = purescriptListToJsArray(list["value1"]);
+    array.push(list["value0"]);
+    return array;
   }
 }
 
 function addButtons(btnType, buttons, alert) {
-  return listOfButtons(buttons).reduce(function(acc, btn) {
+  return purescriptListToJsArray(buttons).reduce(function(acc, btn) {
     acc.addAction(btn);
     return acc;
   }, alert);
@@ -27,7 +27,7 @@ function showAlert(btnType, pureAlert) {
   }
   addButtons(btnType, pureAlert["btnLabels"], alert);
   return alert.presentAlert().then(function(actionIndex) {
-    return listOfButtons(pureAlert["buttons"])[actionIndex];
+    return purescriptListToJsArray(pureAlert["buttons"])[actionIndex];
   });
 }
 
