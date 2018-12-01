@@ -17,6 +17,13 @@ function addButtons(btnType, buttons, alert) {
   }, alert);
 }
 
+function addTextFields(textFields, alert) {
+  return purescriptListToJsArray(textFields).reduce(function(acc, tf) {
+    acc.addTextField(tf["placeholder"], tf["text"]);
+    return acc;
+  }, alert);
+}
+
 function showAlert(btnType, pureAlert) {
   const alert = new Alert();
   if(pureAlert["message"] !== {}) {
@@ -26,8 +33,10 @@ function showAlert(btnType, pureAlert) {
     alert.title = pureAlert["title"]["value0"]
   }
   addButtons(btnType, pureAlert["btnLabels"], alert);
+  addTextFields(purAlert["textFields"], alert);
   return alert.presentAlert().then(function(actionIndex) {
     return purescriptListToJsArray(pureAlert["buttons"])[actionIndex];
+    //TODO: Also return values of text fields
   });
 }
 

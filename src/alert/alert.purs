@@ -1,8 +1,11 @@
-module PurelyScriptable.Alert (newAlert, presentAlert, setMessage, setTitle, addAction, Alert, Button(..)) where
+module PurelyScriptable.Alert (newAlert, presentAlert, setMessage, setTitle, addAction, Alert, Button(..), TextField(..)) where
 
+import Control.Bind ((>>=))
 import Control.Promise (Promise, toAff)
 import Data.List (List(Nil), (:))
 import Data.Maybe (Maybe(..))
+import Data.Semigroup ((<>))
+import Data.Show (class Show, show)
 import Effect (Effect)
 import Effect.Aff (Aff)
 import Effect.Class (liftEffect)
@@ -13,22 +16,24 @@ presentAlert alert = liftEffect (presentAlertImpl alert) >>= toAff
 foreign import presentAlertImpl :: forall btnType . Show btnType => Alert btnType -> Effect (Promise (Button btnType))
 
 newtype Button btnType = Button btnType
-type TextField = { placeholder :: Maybe String
-                   text :: Maybe String
-                 }
+
 
 instance showButton :: Show btnType => Show (Button btnType) where
   show (Button btnValue) = "Button<" <> show btnValue <> ">"
 
-type Alert btnType = { message :: Maybe String,
-                       title :: Maybe String,
+type Alert btnType = { title :: Maybe String,
+                       message :: Maybe String,
                        buttons :: List (Button btnType),
                        btnLabels :: List String,
                        textFields :: List TextField
                      }
 
+type TextField = { placeholder :: Maybe String,
+                   text :: Maybe String
+                 }
+
 newAlert :: forall btnType . Alert btnType
-newAlert = {message : Nothing, title : Nothing, buttons : Nil, btnLabels : Nil}
+newAlert = {message : Nothing, title : Nothing, buttons : Nil, btnLabels : Nil, textFields : Nil}
 
 setMessage :: forall btnType . String -> Alert btnType -> Alert btnType
 setMessage msg alert = alert { message = Just msg }
