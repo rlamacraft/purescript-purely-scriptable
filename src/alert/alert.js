@@ -37,9 +37,13 @@ function showAlert(btnType, pureAlert) {
   addButtons(btnType, pureAlert["btnLabels"], alert);
   addTextFields(pureAlert["textFields"], alert);
   return alert.presentAlert().then(function(actionIndex) {
+    let textFields = [];
+    purescriptListToJsArray(pureAlert["textFields"]).forEach((_, i) => {
+      textFields.push(alert.textFieldValue(i));
+    });
     return {
       value0: purescriptListToJsArray(pureAlert["buttons"])[actionIndex],
-      value1: []
+      value1: textFields
     }
   });
 }
