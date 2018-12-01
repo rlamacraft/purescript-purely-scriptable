@@ -6,6 +6,7 @@ import Data.List (List(Nil), (:))
 import Data.Maybe (Maybe(..))
 import Data.Semigroup ((<>))
 import Data.Show (class Show, show)
+import Data.Unit(Unit)
 import Effect (Effect)
 import Effect.Aff (Aff)
 import Effect.Class (liftEffect)
@@ -14,6 +15,7 @@ presentAlert :: forall btnType . Show btnType => Alert btnType -> Aff (Button bt
 presentAlert alert = liftEffect (presentAlertImpl alert) >>= toAff
 
 foreign import presentAlertImpl :: forall btnType . Show btnType => Alert btnType -> Effect (Promise (Button btnType))
+foreign import setTimeout :: Unit -- this is to ensure setTimeout is exported
 
 newtype Button btnType = Button btnType
 
