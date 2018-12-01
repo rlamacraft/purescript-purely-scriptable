@@ -19,7 +19,9 @@ function addButtons(btnType, buttons, alert) {
 
 function addTextFields(textFields, alert) {
   return purescriptListToJsArray(textFields).reduce(function(acc, tf) {
-    acc.addTextField(tf["placeholder"], tf["text"]);
+    const placeholder = tf.placeholder === {} ? "" : tf.placeholder.value0;
+    const text = tf.placeholder === {} ? "" : tf.text.value0;
+    acc.addTextField(placeholder, text);
     return acc;
   }, alert);
 }
