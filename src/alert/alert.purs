@@ -1,4 +1,4 @@
-module PurelyScriptable.Alert (newAlert, presentAlert, setMessage, setTitle, addAction, Alert, Button(..), TextField(..), addTextField) where
+module PurelyScriptable.Alert (newAlert, presentAlert, setMessage, setTitle, addAction, Alert, Button(..), TextField(..), addTextField, AlertResult(..)) where
 
 import Control.Bind ((>>=))
 import Control.Promise (Promise, toAff)
@@ -10,10 +10,12 @@ import Effect (Effect)
 import Effect.Aff (Aff)
 import Effect.Class (liftEffect)
 
-presentAlert :: forall btnType . Show btnType => Alert btnType -> Aff (Button btnType)
+presentAlert :: forall btnType . Show btnType => Alert btnType -> Aff (AlertResult btnType)
 presentAlert alert = liftEffect (presentAlertImpl alert) >>= toAff
 
-foreign import presentAlertImpl :: forall btnType . Show btnType => Alert btnType -> Effect (Promise (Button btnType))
+data AlertResult btnType = Result (Button btnType) (List String)
+
+foreign import presentAlertImpl :: forall btnType . Show btnType => Alert btnType -> Effect (Promise (AlertResult btnType))
 
 newtype Button btnType = Button btnType
 
