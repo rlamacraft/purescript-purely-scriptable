@@ -18,7 +18,7 @@ function jsArrayToPurescriptList(array) {
     } else {
 	return {
 	    value0: head,
-	    value1: jsArrayToPurescriptList(rest);
+	    value1: jsArrayToPurescriptList(rest)
 	};
     }
 }
