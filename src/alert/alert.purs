@@ -10,22 +10,22 @@ import Effect (Effect)
 import Effect.Aff (Aff)
 import Effect.Class (liftEffect)
 
-presentAlert :: forall btnType . Show btnType => Alert btnType -> Aff (AlertResult btnType)
+presentAlert :: forall b . Show b => Alert b -> Aff (AlertResult b)
 presentAlert alert = liftEffect (presentAlertImpl alert) >>= toAff
 
-data AlertResult btnType = Result (Button btnType) (List String)
+data AlertResult b = Result (Button b) (List String)
 
-foreign import presentAlertImpl :: forall btnType . Show btnType => Alert btnType -> Effect (Promise (AlertResult btnType))
+foreign import presentAlertImpl :: forall b . Show b => Alert b -> Effect (Promise (AlertResult b))
 
-newtype Button btnType = Button btnType
+newtype Button b = Button b
 
 
-instance showButton :: Show btnType => Show (Button btnType) where
+instance showButton :: Show b => Show (Button b) where
   show (Button btnValue) = "Button<" <> show btnValue <> ">"
 
-type Alert btnType = { title :: Maybe String,
+type Alert b = { title :: Maybe String,
                        message :: Maybe String,
-                       buttons :: List (Button btnType),
+                       buttons :: List (Button b),
                        btnLabels :: List String,
                        textFields :: List TextField
                      }
@@ -34,17 +34,23 @@ type TextField = { placeholder :: Maybe String,
                    text :: Maybe String
                  }
 
-newAlert :: forall btnType . Alert btnType
-newAlert = {message : Nothing, title : Nothing, buttons : Nil, btnLabels : Nil, textFields : Nil}
+newAlert :: forall b . Alert b
+newAlert = { message : Nothing,
+             title : Nothing,
+             buttons : Nil,
+             btnLabels : Nil,
+             textFields : Nil
+           }
 
-setMessage :: forall btnType . String -> Alert btnType -> Alert btnType
+setMessage :: forall b . String -> Alert b -> Alert b
 setMessage msg alert = alert { message = Just msg }
 
-setTitle :: forall btnType . String -> Alert btnType -> Alert btnType
+setTitle :: forall b . String -> Alert b -> Alert b
 setTitle title alert = alert { title = Just title }
 
-addAction :: forall btnType . Show btnType => Button btnType -> Alert btnType -> Alert btnType
-addAction btn@(Button btnValue) alert = alert { buttons = btn:alert.buttons, btnLabels = (show btnValue):alert.btnLabels}
+addAction :: forall b . Show b => Button b -> Alert b -> Alert b
+addAction btn@(Button btnValue) alert = alert { buttons = btn:alert.buttons,
+                                                btnLabels = (show btnValue):alert.btnLabels}
 
-addTextField :: forall btnType . TextField -> Alert btnType -> Alert btnType
+addTextField :: forall b . TextField -> Alert b -> Alert b
 addTextField textField alert = alert { textFields = textField:alert.textFields }
