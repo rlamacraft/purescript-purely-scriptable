@@ -19,10 +19,6 @@ foreign import presentAlertImpl :: forall b . Show b => Alert b -> Effect (Promi
 
 newtype Button b = Button b
 
-
-instance showButton :: Show b => Show (Button b) where
-  show (Button btnValue) = "Button<" <> show btnValue <> ">"
-
 type Alert b = { title :: Maybe String,
                        message :: Maybe String,
                        buttons :: List (Button b),
