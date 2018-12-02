@@ -10,6 +10,19 @@ function purescriptListToJsArray(list) {
   }
 }
 
+function jsArrayToPurescriptList(array) {
+    var head = rest[0];
+    var tail = rest.slice(1);
+    if(tail === []) {
+	return {};
+    } else {
+	return {
+	    value0: head,
+	    value1: jsArrayToPurescriptList(rest);
+	};
+    }
+}
+
 function addButtons(btnType, buttons, alert) {
   return purescriptListToJsArray(buttons).reduce(function(acc, btn) {
     acc.addAction(btn);
@@ -43,7 +56,7 @@ function showAlert(btnType, pureAlert) {
     });
     return {
       value0: purescriptListToJsArray(pureAlert["buttons"])[actionIndex],
-      value1: textFields
+      value1: jsArrayToPurescriptList(textFields)
     }
   });
 }
