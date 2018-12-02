@@ -11,15 +11,15 @@ function purescriptListToJsArray(list) {
 }
 
 function jsArrayToPurescriptList(array) {
-    var head = array[0];
-    var tail = array.slice(1);
-    if(tail === []) {
+    if(array.length === 0) {
 	return {};
     } else {
+	var head = array[0];
+	var tail = array.slice(1);
 	return {
 	    value0: head,
-	    value1: jsArrayToPurescriptList(rest)
-	};
+	    value1: jsArrayToPurescriptList(tail)
+	}
     }
 }
 
