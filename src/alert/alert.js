@@ -11,8 +11,8 @@ function purescriptListToJsArray(list) {
 }
 
 function jsArrayToPurescriptList(array) {
-    var head = rest[0];
-    var tail = rest.slice(1);
+    var head = array[0];
+    var tail = array.slice(1);
     if(tail === []) {
 	return {};
     } else {
