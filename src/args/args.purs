@@ -1,3 +1,3 @@
 module PurelyScriptable.Args (argsText) where
 
-foreign import argsText :: String
+foreign import argsText :: Array String
