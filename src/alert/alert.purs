@@ -1,20 +1,14 @@
 module PurelyScriptable.Alert (newAlert, presentAlert, setMessage, setTitle, addAction, Alert, Button(..), TextField(..), addTextField, AlertResult(..), textFieldValue, unsafeTextFieldValue) where
 
+import Control.Applicative (pure)
 import Control.Promise (Promise, toAffE)
 import Control.Semigroupoid ((>>>))
-import Data.Array (index, length, unsafeIndex)
-import Data.Boolean (otherwise)
-import Data.Function ((#), ($))
+import Data.Array (index, unsafeIndex)
 import Data.List (List(Nil), (:))
-import Data.Maybe (Maybe(..))
-import Data.Ord ((<))
+import Data.Maybe (Maybe(..), maybe)
 import Data.Show (class Show, show)
 import Effect (Effect)
 import Effect.Aff (Aff)
-import Partial.Unsafe (unsafePartial)
-
-presentAlert :: forall b . Show b => Alert b -> Aff (AlertResult b)
-presentAlert = presentAlertImpl >>> toAffE
 
 data AlertResult b = Result (Button b) (Array String)
 
@@ -35,6 +29,10 @@ type TextField = {
   text :: Maybe String
 }
 
+-----------------------
+-- Alert API
+-----------------------
+
 newAlert :: forall b . Alert b
 newAlert = {
   message : Nothing,
@@ -43,6 +41,9 @@ newAlert = {
   btnLabels : Nil,
   textFields : Nil
 }
+
+presentAlert :: forall b . Show b => Alert b -> Aff (AlertResult b)
+presentAlert = presentAlertImpl >>> toAffE
 
 setMessage :: forall b . String -> Alert b -> Alert b
 setMessage msg alert = alert { message = Just msg }
@@ -62,3 +63,13 @@ textFieldValue i (Result _ textFieldValues) = index textFieldValues i
 
 unsafeTextFieldValue :: forall b . Partial => Int -> AlertResult b -> String
 unsafeTextFieldValue i (Result _ textFieldValues) = unsafeIndex textFieldValues i
+
+-----------------------
+-- Ask
+-----------------------
+
+class Ask a where
+  ask :: Aff a
+
+askIfNothing :: forall a . Ask a => Maybe a -> Aff a
+askIfNothing = maybe ask pure
