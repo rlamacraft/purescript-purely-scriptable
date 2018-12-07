@@ -1,8 +1,8 @@
-module PurelyScriptable.Alert (newAlert, presentAlert, setMessage, setTitle, addAction, Alert, Button(..), TextField(..), addTextField, AlertResult(..), textFieldValue) where
+module PurelyScriptable.Alert (newAlert, presentAlert, setMessage, setTitle, addAction, Alert, Button(..), TextField(..), addTextField, AlertResult(..), textFieldValue, unsafeTextFieldValue) where
 
 import Control.Promise (Promise, toAffE)
 import Control.Semigroupoid ((>>>))
-import Data.Array (length, unsafeIndex)
+import Data.Array (index, length, unsafeIndex)
 import Data.Boolean (otherwise)
 import Data.Function ((#), ($))
 import Data.List (List(Nil), (:))
@@ -58,8 +58,7 @@ addTextField :: forall b . TextField -> Alert b -> Alert b
 addTextField textField alert = alert { textFields = textField:alert.textFields }
 
 textFieldValue :: forall b . Int -> AlertResult b -> Maybe String
-textFieldValue index (Result _ textFieldValues)
-  | index < length textFieldValues = valueAtIndex textFieldValues index # Just where
-      valueAtIndex :: Array String -> Int -> String
-      valueAtIndex x y = unsafePartial $ unsafeIndex x y
-  | otherwise = Nothing
+textFieldValue i (Result _ textFieldValues) = index textFieldValues i
+
+unsafeTextFieldValue :: forall b . Partial => Int -> AlertResult b -> String
+unsafeTextFieldValue i (Result _ textFieldValues) = unsafeIndex textFieldValues i
