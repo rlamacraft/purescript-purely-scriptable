@@ -1,3 +1,5 @@
-module PurelyScriptable.Args (argsText) where
+module PurelyScriptable.Args (ArgsText, argsText) where
 
-foreign import argsText :: Array String
+newtype ArgsText = ArgsText String
+
+foreign import argsText :: Array ArgsText
