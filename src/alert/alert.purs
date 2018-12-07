@@ -1,4 +1,4 @@
-module PurelyScriptable.Alert (newAlert, presentAlert, setMessage, setTitle, addAction, Alert, Button(..), TextField(..), addTextField, AlertResult(..)) where
+module PurelyScriptable.Alert (newAlert, presentAlert, setMessage, setTitle, addAction, Alert, Button(..), TextField(..), addTextField, AlertResult(..), textFieldValue) where
 
 import Control.Promise (Promise, toAffE)
 import Control.Semigroupoid ((>>>))
