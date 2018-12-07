@@ -56,7 +56,7 @@ function showAlert(btnType, pureAlert) {
     });
     return {
       value0: purescriptListToJsArray(pureAlert["buttons"])[actionIndex],
-      value1: jsArrayToPurescriptList(textFields)
+      value1: textFields
     }
   });
 }

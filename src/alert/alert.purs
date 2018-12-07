@@ -11,7 +11,7 @@ import Effect.Aff (Aff)
 presentAlert :: forall b . Show b => Alert b -> Aff (AlertResult b)
 presentAlert = presentAlertImpl >>> toAffE
 
-data AlertResult b = Result (Button b) (List String)
+data AlertResult b = Result (Button b) (Array String)
 
 foreign import presentAlertImpl :: forall b . Show b => Alert b -> Effect (Promise (AlertResult b))
 
