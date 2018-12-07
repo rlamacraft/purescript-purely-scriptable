@@ -45,6 +45,9 @@ newAlert = {
 presentAlert :: forall b . Show b => Alert b -> Aff (AlertResult b)
 presentAlert = presentAlertImpl >>> toAffE
 
+present :: forall b . Show b => Alert b -> Aff (AlertResult b)
+present = presentAlert
+
 setMessage :: forall b . String -> Alert b -> Alert b
 setMessage msg alert = alert { message = Just msg }
 
