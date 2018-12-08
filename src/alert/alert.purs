@@ -4,9 +4,10 @@ import Control.Applicative (pure)
 import Control.Promise (Promise, toAffE)
 import Control.Semigroupoid ((>>>))
 import Data.Array (index, unsafeIndex)
-import Data.Function ((#))
+import Data.Foldable (foldr)
+import Data.Function (flip, (#), ($), (<<<))
 import Data.Functor ((<#>))
-import Data.List (List(Nil), (:))
+import Data.List (List(..), (:))
 import Data.Maybe (Maybe(..), maybe)
 import Data.Show (class Show, show)
 import Effect (Effect)
@@ -60,6 +61,9 @@ setTitle title alert = alert { title = Just title }
 addAction :: forall b . Show b => Button b -> Alert b -> Alert b
 addAction btn@(Button btnValue) alert = alert { buttons = btn:alert.buttons,
                                                 btnLabels = (show btnValue):alert.btnLabels}
+
+addActions :: forall b . Show b => List (Button b) -> Alert b -> Alert b
+addActions = flip $ foldr addAction
 
 addTextField :: forall b . TextField -> Alert b -> Alert b
 addTextField textField alert = alert { textFields = textField:alert.textFields }
