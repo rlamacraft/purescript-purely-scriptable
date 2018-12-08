@@ -103,10 +103,13 @@ class Ask a where
 askIfNothing :: forall a . Ask a => String -> Maybe a -> Aff a
 askIfNothing alertTitle = maybe (ask alertTitle) pure
 
-instance askString :: Ask String where
-  ask alertTitle = newAlert # setTitle alertTitle
+askForString :: String -> Aff String
+askForString alertTitle = newAlert # setTitle alertTitle
           >>> addAction (Button Close)
           >>> addTextField {placeholder: Nothing, text: Nothing}
           >>> presentAlert
           <#> unsafePartial (unsafeTextFieldValue 0)
+
+instance askString :: Ask String where
+  ask = askForString
 
