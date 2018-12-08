@@ -1,6 +1,6 @@
 module PurelyScriptable.Alert (newAlert, presentAlert, setMessage, setTitle, addAction, addActions, Alert,
                                Button(..), TextField(..), addTextField, AlertResult(..), textFieldValue,
-                               unsafeTextFieldValue, class Ask, ask, askIfNothing, present, closeButton, displayString, Close(..)) where
+                               unsafeTextFieldValue, class Ask, ask, askIfNothing, present, closeButton, displayString, Close(..), askForString) where
 
 import Control.Applicative (pure)
 import Control.Promise (Promise, toAffE)
@@ -105,7 +105,7 @@ askIfNothing alertTitle = maybe (ask alertTitle) pure
 
 askForString :: String -> Aff String
 askForString alertTitle = newAlert # setTitle alertTitle
-          >>> addAction (Button Close)
+          >>> addAction closeButton
           >>> addTextField {placeholder: Nothing, text: Nothing}
           >>> presentAlert
           <#> unsafePartial (unsafeTextFieldValue 0)
