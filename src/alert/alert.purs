@@ -1,14 +1,17 @@
-module PurelyScriptable.Alert (newAlert, presentAlert, setMessage, setTitle, addAction, Alert, Button(..), TextField(..), addTextField, AlertResult(..), textFieldValue, unsafeTextFieldValue) where
+module PurelyScriptable.Alert (newAlert, presentAlert, setMessage, setTitle, addAction, Alert, Button(..), TextField(..), addTextField, AlertResult(..), textFieldValue, unsafeTextFieldValue, class Ask, ask, askIfNothing, present) where
 
 import Control.Applicative (pure)
 import Control.Promise (Promise, toAffE)
 import Control.Semigroupoid ((>>>))
 import Data.Array (index, unsafeIndex)
+import Data.Function ((#))
+import Data.Functor ((<#>))
 import Data.List (List(Nil), (:))
 import Data.Maybe (Maybe(..), maybe)
 import Data.Show (class Show, show)
 import Effect (Effect)
 import Effect.Aff (Aff)
+import Partial.Unsafe (unsafePartial)
 
 data AlertResult b = Result (Button b) (Array String)
 
@@ -72,7 +75,20 @@ unsafeTextFieldValue i (Result _ textFieldValues) = unsafeIndex textFieldValues 
 -----------------------
 
 class Ask a where
-  ask :: Aff a
+  ask :: String -> Aff a
 
-askIfNothing :: forall a . Ask a => Maybe a -> Aff a
-askIfNothing = maybe ask pure
+askIfNothing :: forall a . Ask a => String -> Maybe a -> Aff a
+askIfNothing alertTitle = maybe (ask alertTitle) pure
+
+data Close = Close
+
+instance showClose :: Show Close where
+  show Close = "Close"
+
+instance askString :: Ask String where
+  ask alertTitle = newAlert # setTitle alertTitle
+          >>> addAction (Button Close)
+          >>> addTextField {placeholder: Nothing, text: Nothing}
+          >>> presentAlert
+          <#> unsafePartial (unsafeTextFieldValue 0)
+
