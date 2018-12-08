@@ -1,4 +1,6 @@
-module PurelyScriptable.Alert (newAlert, presentAlert, setMessage, setTitle, addAction, Alert, Button(..), TextField(..), addTextField, AlertResult(..), textFieldValue, unsafeTextFieldValue, class Ask, ask, askIfNothing, present) where
+module PurelyScriptable.Alert (newAlert, presentAlert, setMessage, setTitle, addAction, addActions, Alert,
+                               Button(..), TextField(..), addTextField, AlertResult(..), textFieldValue,
+                               unsafeTextFieldValue, class Ask, ask, askIfNothing, present) where
 
 import Control.Applicative (pure)
 import Control.Promise (Promise, toAffE)
