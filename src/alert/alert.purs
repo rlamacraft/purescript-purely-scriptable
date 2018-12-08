@@ -1,6 +1,6 @@
 module PurelyScriptable.Alert (newAlert, presentAlert, setMessage, setTitle, addAction, addActions, Alert,
                                Button(..), TextField(..), addTextField, AlertResult(..), textFieldValue,
-                               unsafeTextFieldValue, class Ask, ask, askIfNothing, present) where
+                               unsafeTextFieldValue, class Ask, ask, askIfNothing, present, closeButton) where
 
 import Control.Applicative (pure)
 import Control.Promise (Promise, toAffE)
@@ -90,6 +90,9 @@ data Close = Close
 
 instance showClose :: Show Close where
   show Close = "Close"
+
+closeButton :: Button Close
+closeButton = Button Close
 
 instance askString :: Ask String where
   ask alertTitle = newAlert # setTitle alertTitle
