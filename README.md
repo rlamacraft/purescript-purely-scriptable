@@ -18,17 +18,15 @@ optionToSplitPattern Characters = Pattern ""
 optionToSplitPattern Words      = Pattern " "
 optionToSplitPattern Lines      = Pattern "\n"
 
-data Close = Close
-
-instance showClose :: Show Close where
-  show Close = "Close"
-
-getCount :: Button Option -> Int
-getCount (Button option) = split (optionToSplitPattern option) argsText # length
+showOptionAlert :: Aff (AlertResult Option)
+showOptionAlert = newAlert # setTitle "Count what?"
+                    >>> addActions ((Button Lines):(Button Words):(Button Characters):Nil)
+                    >>> presentAlert
 
 main :: Effect Unit
-main = do
-  launchAff_ $ showOptionAlert <#> getCount >>= showCountAlert where
-    showOptionAlert = newAlert # setTitle "Count what?" >>> addAction (Button Characters) >>> addAction (Button Words) >>> addAction (Button Lines) >>> presentAlert
-    showCountAlert count = newAlert # setTitle (show count) >>> addAction (Button Close) >>> presentAlert
+main = launchAff_ $ do
+  Result (Button option) _ <- showOptionAlert
+  ArgsText text <- askIfNothing "No text passed from share sheet. Paste here instead." $ head argsText
+  let pattern = optionToSplitPattern option
+  split pattern text # length >>> show >>> displayString
 ```
