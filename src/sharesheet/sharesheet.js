@@ -1,7 +1,7 @@
 "use strict";
 
-exports.presentAndWaitImpl = function(activityItems) {
+exports.presentAndWaitImpl_single = function(activityItem) {
   return function() {
-      return await ShareSheet.presentAndWait(activityItems);
+      return ShareSheet.presentAndWait([activityItem]);
   }
 }

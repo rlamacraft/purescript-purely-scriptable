@@ -9,14 +9,14 @@ import Effect.Aff (Aff)
 data ShareSheetResult = Result Boolean
 
 presentAndWait :: forall a . a -> Aff ShareSheetResult
-presentAndWait activityItems = presentAndWaitImpl activityItems # toAffE <#> transformShareSheetResult
+presentAndWait activityItem = presentAndWaitImpl_single activityItem # toAffE <#> transformShareSheetResult
 
 type ForeignShareSheetResult = {
   activity_type :: String,
   completed :: Boolean
 }
 
-foreign import presentAndWaitImpl :: forall a . a -> Effect (Promise ForeignShareSheetResult)
+foreign import presentAndWaitImpl_single :: forall a . a -> Effect (Promise ForeignShareSheetResult)
 
 transformShareSheetResult :: ForeignShareSheetResult -> ShareSheetResult
 transformShareSheetResult foreignResult = Result foreignResult.completed
