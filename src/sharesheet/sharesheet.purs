@@ -1,22 +1,36 @@
-module ShareSheet (ShareSheetResult, presentAndWait) where
+module ShareSheet (ShareSheetResult, presentAndWait, presentAndWaitMultiple) where
 
 import Control.Promise (Promise, toAffE)
-import Data.Function ((#))
-import Data.Functor ((<#>))
+import Control.Semigroupoid ((>>>))
+import Data.Unit(Unit)
 import Effect (Effect)
 import Effect.Aff (Aff)
 
-data ShareSheetResult = Result Boolean
-
-presentAndWait :: forall a . a -> Aff ShareSheetResult
-presentAndWait activityItem = presentAndWaitImpl_single activityItem # toAffE <#> transformShareSheetResult
-
-type ForeignShareSheetResult = {
+type ShareSheetResult = {
   activity_type :: String,
   completed :: Boolean
 }
 
-foreign import presentAndWaitImpl_single :: forall a . a -> Effect (Promise ForeignShareSheetResult)
+-----------------------
+-- ShareSheet API
+-----------------------
 
-transformShareSheetResult :: ForeignShareSheetResult -> ShareSheetResult
-transformShareSheetResult foreignResult = Result foreignResult.completed
+presentAndWait :: forall a . a -> Aff ShareSheetResult
+presentAndWait = presentAndWaitImpl_single >>> toAffE
+
+foreign import presentAndWaitImpl_single :: forall a . a -> Effect (Promise ShareSheetResult)
+
+presentAndWaitMultiple :: forall a . Array a -> Aff ShareSheetResult
+presentAndWaitMultiple = presentAndWaitImpl_multiple >>> toAffE
+
+foreign import presentAndWaitImpl_multiple :: forall a . Array a -> Effect (Promise ShareSheetResult)
+
+present :: forall a . a -> Effect Unit
+present = presentImpl_single
+
+foreign import presentImpl_single :: forall a . a -> Effect Unit
+
+presentMultiple :: forall a . Array a -> Effect Unit
+presentMultiple = presentImpl_multiple
+
+foreign import presentImpl_multiple :: forall a . Array a -> Effect Unit
