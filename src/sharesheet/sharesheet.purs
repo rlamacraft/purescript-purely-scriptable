@@ -1,4 +1,4 @@
-module ShareSheet (ShareSheetResult, presentAndWait, presentAndWaitMultiple) where
+module ShareSheet (ShareSheetResult, presentAndWait, presentAndWaitMultiple, present, presentMultiple) where
 
 import Control.Promise (Promise, toAffE)
 import Control.Semigroupoid ((>>>))
