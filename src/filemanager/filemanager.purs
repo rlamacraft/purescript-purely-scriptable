@@ -1,16 +1,19 @@
 module FileManager(
   FileManager, iCloud, local,
-  Path, Directory, joinPath, appendPath, (/), 
-  documentDirectory, libraryDirectory, temporaryDirectory, isDirectory, listContents
+  Path, Directory, joinPath, appendPath, appendPathAsString, (/), 
+  documentDirectory, libraryDirectory, temporaryDirectory, isDirectory, listContents,
+  FilePath, FileName, FileExtension, filePath, fileExists
   ) where
 
 import Control.Semigroupoid ((>>>))
 import Data.Foldable (intercalate)
+import Data.Function ((#))
 import Data.Functor (map, (<#>))
 import Data.List (List, fromFoldable, singleton) as List
 import Data.Monoid (class Monoid, (<>), mempty)
 import Data.Newtype (class Newtype, over2, un)
 import Data.Semigroup (class Semigroup, append)
+import Data.Show (class Show, show)
 import Data.String.Common (split)
 import Data.String.Pattern (Pattern(..))
 import Effect (Effect)
@@ -52,7 +55,10 @@ singleton = List.singleton >>> Path
 appendPath :: Path -> Directory -> Path
 appendPath path = singleton >>> joinPath path
 
-infixl 9 appendPath as /
+appendPathAsString :: Path -> String -> Path
+appendPathAsString path str = Directory str # appendPath path
+
+infixl 9 appendPathAsString as /
 
 -----------------------
 -- FileManager APIs
@@ -101,3 +107,30 @@ listContents fileManager path = listContents_Impl (fileManagerName fileManager) 
                                 <#> List.fromFoldable >>> map toPath
 
 foreign import listContents_Impl :: String -> String -> Effect (Array String)
+
+-----------------------
+-- File APIs
+-----------------------
+
+newtype FileName = FileName String
+derive instance newtypeFilename :: Newtype FileName _
+
+newtype FileExtension = FileExtension String
+derive instance newtypeFileExtension :: Newtype FileExtension _
+
+data FilePath = FilePath Path FileName FileExtension
+
+filePath :: Path -> String -> String -> FilePath
+filePath path name ext = FilePath path (FileName name) (FileExtension ext)
+
+instance showFilePath :: Show FilePath where
+  show (FilePath path name ext) = fromPath path <>
+                                  (un Pattern pathSeparator) <>
+                                  (un FileName name) <>
+                                  "." <>
+                                  (un FileExtension ext)
+
+fileExists :: FileManager -> FilePath -> Effect Boolean
+fileExists fileManager path = fileExists_Impl (fileManagerName fileManager) (show path)
+
+foreign import fileExists_Impl :: String -> String -> Effect Boolean

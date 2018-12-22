@@ -35,3 +35,10 @@ exports.listContents_Impl = function(fileManagerName) {
 	return fileManager.listContents(path);
     }
 }
+
+exports.fileExists_Impl = function(fileManagerName) {
+    const fileManager = fileManagerFromName(fileManagerName);
+    return function(filePath) {
+	return fileManager.fileExists(filePath);
+    }
+}
