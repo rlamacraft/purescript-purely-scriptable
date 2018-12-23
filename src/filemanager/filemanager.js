@@ -42,3 +42,19 @@ exports.fileExists_Impl = function(fileManagerName) {
 	return fileManager.fileExists(filePath);
     }
 }
+
+exports.readString_Impl = function(fileManagerName) {
+    const fileManager = fileManagerFromName(fileManagerName);
+    return function(filePath) {
+	return fileManager.readString(filePath);
+    }
+}
+
+exports.writeString_Impl = function(fileManagerName) {
+    const fileManager = fileManagerFromName(fileManagerName);
+    return function(filePath) {
+	return function(content) {
+	    fileManager.writeString(filePath, content);
+	}
+    }
+}

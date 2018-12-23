@@ -16,6 +16,7 @@ import Data.Semigroup (class Semigroup, append)
 import Data.Show (class Show, show)
 import Data.String.Common (split)
 import Data.String.Pattern (Pattern(..))
+import Data.Unit (Unit)
 import Effect (Effect)
 
 -----------------------
@@ -134,3 +135,17 @@ fileExists :: FileManager -> FilePath -> Effect Boolean
 fileExists fileManager path = fileExists_Impl (fileManagerName fileManager) (show path)
 
 foreign import fileExists_Impl :: String -> String -> Effect Boolean
+
+-----------------------
+-- Plain Text  APIs
+-----------------------
+
+readString :: FileManager -> FilePath -> Effect String
+readString fileManager path = readString_Impl (fileManagerName fileManager) (show path)
+
+foreign import readString_Impl :: String -> String -> Effect String
+
+writeString :: FileManager -> FilePath -> String -> Effect Unit
+writeString fileManager path content = writeString_Impl (fileManagerName fileManager) (show path) content
+
+foreign import writeString_Impl :: String -> String -> String -> Effect Unit
