@@ -1,17 +1,18 @@
 module FileManager(
   FileManager, iCloud, local,
-  Path, Directory, joinPath, appendPath, appendPathAsString, (/), 
+  Path, Directory, joinPath, appendPathAsString, (/), root,
   documentDirectory, libraryDirectory, temporaryDirectory, isDirectory, listContents,
   FilePath, FileName, FileExtension, filePath, fileExists,
   readString, writeString
   ) where
 
 import Control.Semigroupoid ((>>>))
+import Data.Eq (class Eq, (==))
 import Data.Foldable (intercalate)
 import Data.Function ((#))
 import Data.Functor (map, (<#>))
 import Data.List (List, fromFoldable, singleton) as List
-import Data.Monoid (class Monoid, (<>), mempty)
+import Data.Monoid (class Monoid, mempty, (<>))
 import Data.Newtype (class Newtype, over2, un)
 import Data.Semigroup (class Semigroup, append)
 import Data.Show (class Show, show)
@@ -27,14 +28,20 @@ import Effect (Effect)
 newtype Directory = Directory String
 derive instance newtypeDirectory :: Newtype Directory _
 
+instance eqDirectory :: Eq Directory where
+  eq (Directory x) (Directory y) = x == y
+
 newtype Path = Path (List.List Directory)
 derive instance newtypePath :: Newtype Path _
 
 instance semigroupPath :: Semigroup Path where
-  append = over2 Path (<>)
+  append = over2 Path append
 
 instance monoidPath :: Monoid Path where
   mempty = Path mempty
+
+instance eqPath :: Eq Path where
+  eq (Path xs) (Path ys) = xs == ys
 
 pathSeparator :: Pattern
 pathSeparator = Pattern "/"
@@ -61,6 +68,9 @@ appendPathAsString :: Path -> String -> Path
 appendPathAsString path str = Directory str # appendPath path
 
 infixl 9 appendPathAsString as /
+
+root :: Path
+root = Path mempty
 
 -----------------------
 -- FileManager APIs
