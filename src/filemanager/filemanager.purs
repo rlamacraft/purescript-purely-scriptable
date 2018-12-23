@@ -110,12 +110,12 @@ temporaryDirectory = temporaryDirectory_Impl >>> map toPath
 foreign import temporaryDirectory_Impl :: FileManager -> Effect String
 
 isDirectory :: FileManager -> Path -> Effect Boolean
-isDirectory fileManager path = isDirectory_Impl (fileManagerName fileManager) (fromPath path)
+isDirectory fm path = isDirectory_Impl (fileManagerName fm) (fromPath path)
 
 foreign import isDirectory_Impl :: String -> String -> Effect Boolean
 
 listContents :: FileManager -> Path -> Effect (List.List Path)
-listContents fileManager path = listContents_Impl (fileManagerName fileManager) (fromPath path)
+listContents fm path = listContents_Impl (fileManagerName fm) (fromPath path)
                                 <#> List.fromFoldable >>> map toPath
 
 foreign import listContents_Impl :: String -> String -> Effect (Array String)
@@ -147,7 +147,7 @@ fileNameAsString fp@(FilePath _ _ ext) true = fileNameAsString fp false <>
 fileNameAsString (FilePath _ name _) false = un FileName name
 
 fileExists :: FileManager -> FilePath -> Effect Boolean
-fileExists fileManager path = fileExists_Impl (fileManagerName fileManager) (show path)
+fileExists fm path = fileExists_Impl (fileManagerName fm) (show path)
 
 foreign import fileExists_Impl :: String -> String -> Effect Boolean
 
@@ -156,11 +156,11 @@ foreign import fileExists_Impl :: String -> String -> Effect Boolean
 -----------------------
 
 readString :: FileManager -> FilePath -> Effect String
-readString fileManager path = readString_Impl (fileManagerName fileManager) (show path)
+readString fm path = readString_Impl (fileManagerName fm) (show path)
 
 foreign import readString_Impl :: String -> String -> Effect String
 
 writeString :: FileManager -> FilePath -> String -> Effect Unit
-writeString fileManager path content = writeString_Impl (fileManagerName fileManager) (show path) content
+writeString fm path content = writeString_Impl (fileManagerName fm) (show path) content
 
 foreign import writeString_Impl :: String -> String -> String -> Effect Unit
