@@ -1,7 +1,0 @@
--- TODO: Setup some testing
-
-
-f :: Effect Boolean
-f = do
-  docs <- iCloud # documentDirectory
-  filePath (docs / "bar") "foo" "txt" # fileExists iCloud
