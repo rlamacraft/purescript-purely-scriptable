@@ -8,7 +8,7 @@ import Data.Monoid (mempty)
 import Data.Semigroup ((<>))
 import Data.Unit (Unit)
 
-import FileManager (joinPath, root, (/), filePath, fileNameAsString)
+import FileManager (joinPath, root, (/), filePath, fileNameAsString, fileExtensionAsString)
 import Test.Unit (suite, test, TestF)
 import Test.Unit.Assert (assert)
 
@@ -16,6 +16,7 @@ testFileManager :: Free TestF Unit
 testFileManager = suite "FileManager" do
   testPathIsAMonoid
   testFileNameAsString
+  testFileExtensionAsString
 
 testPathIsAMonoid :: Free TestF Unit
 testPathIsAMonoid = suite "Path is a Monoid" do
@@ -35,3 +36,9 @@ testFileNameAsString = suite "fileNameAsString does what it says on the tin" do
     let fp = filePath (root / "a") "foo" "txt"
     assert "without extension" $ "foo" == fileNameAsString fp false
     assert "with extension" $ "foo.txt" == fileNameAsString fp true
+
+testFileExtensionAsString :: Free TestF Unit
+testFileExtensionAsString = suite "fileExtensionAsString also does what it says" do
+  test "" do
+    let fp = filePath (root / "a") "foo" "txt"
+    assert "" $ "txt" == fileExtensionAsString fp

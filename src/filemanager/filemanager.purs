@@ -2,7 +2,8 @@ module FileManager(
   FileManager, iCloud, local,
   Path, Directory, joinPath, appendPathAsString, (/), root,
   documentDirectory, libraryDirectory, temporaryDirectory, isDirectory, listContents,
-  FilePath(..), FileName, FileExtension, filePath, fileNameAsString, fileExists,
+  FilePath(..), FileName, FileExtension, filePath,
+  fileNameAsString, fileExtensionAsString, fileExists,
   readString, writeString
   ) where
 
@@ -141,10 +142,11 @@ instance showFilePath :: Show FilePath where
                                 fileNameAsString fp true
 
 fileNameAsString :: FilePath -> Boolean -> String
-fileNameAsString fp@(FilePath _ _ ext) true = fileNameAsString fp false <>
-                                              "." <>
-                                              un FileExtension ext
+fileNameAsString fp true = fileNameAsString fp false <> "." <> fileExtensionAsString fp
 fileNameAsString (FilePath _ name _) false = un FileName name
+
+fileExtensionAsString :: FilePath -> String
+fileExtensionAsString (FilePath _ _ ext) = un FileExtension ext
 
 fileExists :: FileManager -> FilePath -> Effect Boolean
 fileExists fm path = fileExists_Impl (fileManagerName fm) (show path)
