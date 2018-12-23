@@ -2,7 +2,8 @@ module FileManager(
   FileManager, iCloud, local,
   Path, Directory, joinPath, appendPath, appendPathAsString, (/), 
   documentDirectory, libraryDirectory, temporaryDirectory, isDirectory, listContents,
-  FilePath, FileName, FileExtension, filePath, fileExists
+  FilePath, FileName, FileExtension, filePath, fileExists,
+  readString, writeString
   ) where
 
 import Control.Semigroupoid ((>>>))
