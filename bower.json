@@ -12,7 +12,9 @@
   "dependencies": {
     "purescript-aff-promise": "2.0.1",
     "purescript-prelude": "^4.1.0",
-    "purescript-maybe": "^4.0.0"
+    "purescript-maybe": "^4.0.0",
+    "purescript-lens": "^4.0.0",
+    "purescript-profunctor-lenses": "^5.0.0"
   },
   "ignore": [
     "**/.*",

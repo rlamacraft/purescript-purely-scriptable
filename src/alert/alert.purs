@@ -1,4 +1,4 @@
-module PurelyScriptable.Alert (newAlert, presentAlert, setMessage, setTitle, addAction, addActions, Alert,
+module PurelyScriptable.Alert (newAlert, presentAlert, message, setMessage, title, setTitle, addAction, addActions, Alert,
                                Button(..), TextField(..), addTextField, AlertResult(..), textFieldValue,
                                unsafeTextFieldValue, class Ask, ask, askIfNothing, present, closeButton, displayString, Close(..), askForString) where
 
@@ -6,14 +6,17 @@ import Control.Applicative (pure)
 import Control.Promise (Promise, toAffE)
 import Control.Semigroupoid ((>>>))
 import Data.Array (index, unsafeIndex)
-import Data.Foldable (foldr)
-import Data.Function (flip, (#), ($))
-import Data.Functor ((<#>))
-import Data.List (List(..), (:))
+import Data.Function ((#), ($))
+import Data.Functor (map, (<#>))
+import Data.List (List(..), singleton)
 import Data.Maybe (Maybe(..), maybe)
 import Data.Show (class Show, show)
 import Effect (Effect)
 import Effect.Aff (Aff)
+import Optic.Getter(view)
+import Optic.Lens (lens)
+import Optic.Setter (set, concat)
+import Optic.Types (Lens')
 import Partial.Unsafe (unsafePartial)
 
 data AlertResult b = Result (Button b) (Array String)
@@ -22,12 +25,15 @@ foreign import presentAlertImpl :: forall b . Show b => Alert b -> Effect (Promi
 
 newtype Button b = Button b
 
+instance showButton :: Show b => Show (Button b) where
+  show (Button b) = show b
+
 type Alert b = {
-  title :: Maybe String,
-  message :: Maybe String,
+  _title :: Maybe String,
+  _message :: Maybe String,
   buttons :: List (Button b),
   btnLabels :: List String,
-  textFields :: List TextField
+  _textFields :: List TextField
 }
 
 type TextField = { 
@@ -41,34 +47,51 @@ type TextField = {
 
 newAlert :: forall b . Alert b
 newAlert = {
-  message : Nothing,
-  title : Nothing,
+  _title : Nothing,
+  _message : Nothing,
   buttons : Nil,
   btnLabels : Nil,
-  textFields : Nil
+  _textFields : Nil
 }
 
 presentAlert :: forall b . Show b => Alert b -> Aff (AlertResult b)
-presentAlert = presentAlertImpl >>> toAffE
+presentAlert = setBtnLabels >>> presentAlertImpl >>> toAffE
 
 present :: forall b . Show b => Alert b -> Aff (AlertResult b)
 present = presentAlert
 
+message :: forall b . Lens' (Alert b) (Maybe String)
+message = lens _._message (\a m -> a {_message = m})
+
 setMessage :: forall b . String -> Alert b -> Alert b
-setMessage msg alert = alert { message = Just msg }
+setMessage msg = set message $ Just msg
+
+title :: forall b . Lens' (Alert b)  (Maybe String)
+title = lens _._title (\a t -> a {_title = t})
 
 setTitle :: forall b . String -> Alert b -> Alert b
-setTitle title alert = alert { title = Just title }
+setTitle str = set title $ Just str
+
+actionLabels :: forall b . Lens' (Alert b) (List String)
+actionLabels = lens _.btnLabels (\a bls -> a {btnLabels = bls})
+
+setBtnLabels :: forall b . Show b => Alert b -> Alert b
+setBtnLabels a = set actionLabels (map show (view actions a)) a
+
+actions :: forall b . Lens' (Alert b) (List (Button b))
+actions = lens _.buttons (\alert bs -> alert {buttons = bs})
 
 addAction :: forall b . Show b => Button b -> Alert b -> Alert b
-addAction btn@(Button btnValue) alert = alert { buttons = btn:alert.buttons,
-                                                btnLabels = (show btnValue):alert.btnLabels}
+addAction btn = addActions $ singleton btn
 
 addActions :: forall b . Show b => List (Button b) -> Alert b -> Alert b
-addActions = flip $ foldr addAction
+addActions = concat actions
+
+textFields :: forall b . Lens' (Alert b) (List TextField)
+textFields = lens _._textFields (\a ts -> a {_textFields = ts})
 
 addTextField :: forall b . TextField -> Alert b -> Alert b
-addTextField textField alert = alert { textFields = textField:alert.textFields }
+addTextField t = concat textFields $ singleton t
 
 textFieldValue :: forall b . Int -> AlertResult b -> Maybe String
 textFieldValue i (Result _ textFieldValues) = index textFieldValues i
