@@ -1,12 +1,12 @@
 module UITable (
-  TextAlignment(..), Cell(..), Row(..), Table(..), class Rowable, rowable,
+  TextAlignment(..), Cell(..), Row(..), Header(..), Table(..), class Rowable, rowable, header, headings,
   text, singularString, centerAligned, leftAligned, rightAligned,
   toTable) where
 
+import Data.Eq (class Eq)
 import Data.Function ((>>>))
 import Data.Functor (map)
 import Data.Maybe (Maybe(..))
-import Data.Eq (class Eq)
 
 -----------------------
 -- UITableCell
@@ -41,15 +41,22 @@ rightAligned (Text title subtitle _) = Text title subtitle Right
 newtype Row a = Row (Array Cell)
 derive instance eqRow :: Eq (Row a)
 
+newtype Header a = Header (Row a)
+derive instance eqHeader :: Eq (Header a)
+
+headings :: forall a . Array String -> Header a
+headings = map singularString >>> Row >>> Header
+
 -----------------------
 -- UITable
 -----------------------
 
-newtype Table a = Table (Array (Row a))
+data Table a = Table (Maybe (Header a)) (Array (Row a))
 derive instance eqTable :: Eq  (Table a)
 
 class Rowable a where
   rowable :: a -> Row a
+  header :: Header a
 
 toTable :: forall a . Rowable a => Array a -> Table a
-toTable = map rowable >>> Table
+toTable = map rowable >>> Table (Just header)
