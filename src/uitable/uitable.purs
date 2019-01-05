@@ -3,10 +3,14 @@ module UITable (
   text, singularString, centerAligned, leftAligned, rightAligned,
   toTable) where
 
+import Control.Promise (Promise, toAffE)
 import Data.Eq (class Eq)
 import Data.Function ((>>>))
 import Data.Functor (map)
 import Data.Maybe (Maybe(..))
+import Data.Unit (Unit)
+import Effect (Effect)
+import Effect.Aff (Aff)
 
 -----------------------
 -- UITableCell
@@ -60,3 +64,8 @@ class Rowable a where
 
 toTable :: forall a . Rowable a => Array a -> Table a
 toTable = map rowable >>> Table (Just header)
+
+present :: forall a . Table a -> Aff Unit
+present = present_Impl >>> toAffE
+
+foreign import present_Impl :: forall a . Table a -> Effect (Promise Unit)
