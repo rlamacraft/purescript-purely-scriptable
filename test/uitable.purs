@@ -1,18 +1,35 @@
 module Test.UITable where
 
+import Control.Bind (discard)
 import Control.Monad.Free (Free)
 import Data.Eq ((==))
 import Data.Function (($))
 import Data.Maybe (Maybe(..))
+import Data.Newtype (class Newtype)
 import Data.Show (show)
 import Data.Unit (Unit)
 import Test.Unit (suite, test, TestF)
 import Test.Unit.Assert (assert)
-import UITable (class Rowable, TextAlignment(..), Cell(..), Row(..), Header(..), Table(..), singularString, toTable, headings)
+import UITable (class Rowable, Cell(..), Header(..), Row(..), Table(..), TextAlignment(..), deriveStringRow, headings, rowable, singularString, toTable)
 
 testUITable :: Free TestF Unit
 testUITable = suite "UITable" do
   testToTable
+  testDeriveStringRow
+
+
+newtype MyString = MyString String
+derive instance newtypeMyString :: Newtype MyString _
+
+instance rowableMyString :: Rowable MyString where
+  rowable = deriveStringRow
+  header = headings []
+
+testDeriveStringRow :: Free TestF Unit
+testDeriveStringRow = suite "deriveStringRow" do
+  test "equality with manual construction" do
+    assert "" $ Row [(Text (Just "foo") Nothing Left)] == (rowable $ MyString "foo")
+
 
 
 data TestType = Test String Int

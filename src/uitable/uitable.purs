@@ -1,13 +1,15 @@
 module UITable (
   TextAlignment(..), Cell(..), Row(..), Header(..), Table(..), class Rowable, rowable, header, headings,
-  text, singularString, centerAligned, leftAligned, rightAligned, present,
+  text, singularString, deriveStringRow, centerAligned, leftAligned, rightAligned, present,
   toTable) where
 
 import Control.Promise (Promise, toAffE)
+import Data.Array (singleton)
 import Data.Eq (class Eq)
 import Data.Function ((>>>))
 import Data.Functor (map)
 import Data.Maybe (Maybe(..))
+import Data.Newtype (class Newtype, unwrap)
 import Data.Unit (Unit)
 import Effect (Effect)
 import Effect.Aff (Aff)
@@ -56,11 +58,14 @@ headings = map singularString >>> Row >>> Header
 -----------------------
 
 data Table a = Table (Maybe (Header a)) (Array (Row a))
-derive instance eqTable :: Eq  (Table a)
+derive instance eqTable :: Eq (Table a)
 
 class Rowable a where
   rowable :: a -> Row a
   header :: Header a
+
+deriveStringRow :: forall a . Newtype a String => a -> Row a
+deriveStringRow = unwrap >>> singularString >>> singleton >>> Row
 
 toTable :: forall a . Rowable a => Array a -> Table a
 toTable = map rowable >>> Table (Just header)
