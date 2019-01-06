@@ -4,8 +4,8 @@ function tableFromMatrix(matrix) {
     var table = new UITable();
     for(var i = 0; i < matrix.length; i++) {
 	var row = new UITableRow();
-	for(var j = 0; i < matrix[i].length; j++) {
-	    var cell = UITableCell.text(matrix[i][j].value0, matrix[i][j].value1);
+	for(var j = 0; j < matrix[i].length; j++) {
+	    var cell = UITableCell.text(matrix[i][j].value0.value0, matrix[i][j].value1.value0);
 	    row.addCell(cell);
 	}
 	table.addRow(row);
