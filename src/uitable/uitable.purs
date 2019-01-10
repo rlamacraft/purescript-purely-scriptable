@@ -1,12 +1,12 @@
 module UITable (
   TextAlignment(..), Cell(..), Row(..), Header(..), Table(..), class Rowable, rowable, header, headings,
-  text, singularString, deriveStringRow, centerAligned, leftAligned, rightAligned, present,
-  toTable) where
+  text, singularString, deriveStringRow, centerAligned, leftAligned, rightAligned, present
+  ) where
 
 import Control.Promise (Promise, toAffE)
 import Data.Array (singleton)
 import Data.Eq (class Eq)
-import Data.Function ((>>>))
+import Data.Function ((#), (>>>))
 import Data.Functor (map)
 import Data.Maybe (Maybe(..))
 import Data.Newtype (class Newtype, unwrap)
@@ -70,7 +70,17 @@ deriveStringRow = unwrap >>> singularString >>> singleton >>> Row
 toTable :: forall a . Rowable a => Array a -> Table a
 toTable = map rowable >>> Table (Just header)
 
-present :: forall a . Table a -> Aff Unit
-present = present_Impl >>> toAffE
+present :: forall a . Rowable a => Array a -> Aff Unit
+present = toTable >>> present_Impl >>> toAffE
 
 foreign import present_Impl :: forall a . Table a -> Effect (Promise Unit)
+
+present_multiSelect :: forall a . Rowable a => Array a -> Aff (Array a)
+present_multiSelect as = present_multiSelect_Impl (toTable as) as # toAffE
+
+foreign import present_multiSelect_Impl :: forall a . Table a -> Array a -> Effect (Promise (Array a))
+
+present_singleSelect :: forall a . Rowable a => Array a -> Aff a
+present_singleSelect as = present_singleSelect_Impl (toTable as) as # toAffE
+
+foreign import present_singleSelect_Impl :: forall a . Table a -> Array a -> Effect (Promise a)
