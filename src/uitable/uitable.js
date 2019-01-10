@@ -55,6 +55,6 @@ exports.present_singleSelect_Impl = function(tableData) {
 
 exports.present_Impl = function(tableData) {
     return function() {
-	return presentAndReturnSelectedRow(tableData.value1, [], "no");
+	return presentAndReturnSelectedRows(tableData.value1, [], "no");
     }
 }
