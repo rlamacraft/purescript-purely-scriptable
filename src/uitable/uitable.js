@@ -1,6 +1,6 @@
 "use strict";
 
-function tableFromMatrix(matrix, rowData, selecting) {
+function presentAndReturnSelectedRows(matrix, rowData, selecting) {
     var selected = [];
     var table = new UITable();
     for(var i = 0; i < matrix.length; i++) {
