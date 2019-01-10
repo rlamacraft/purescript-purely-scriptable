@@ -1,6 +1,7 @@
 module UITable (
   TextAlignment(..), Cell(..), Row(..), Header(..), Table(..), class Rowable, rowable, header, headings,
-  text, singularString, deriveStringRow, centerAligned, leftAligned, rightAligned, present
+  text, singularString, deriveStringRow, centerAligned, leftAligned, rightAligned, 
+  present, present_singleSelect, present_multiSelect
   ) where
 
 import Control.Promise (Promise, toAffE)
