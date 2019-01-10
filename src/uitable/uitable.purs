@@ -5,7 +5,7 @@ module UITable (
   ) where
 
 import Control.Promise (Promise, toAffE)
-import Data.Array (singleton)
+import Data.Array (nubEq, singleton)
 import Data.Eq (class Eq)
 import Data.Function ((#), (>>>))
 import Data.Functor (map)
@@ -76,8 +76,8 @@ present = toTable >>> present_Impl >>> toAffE
 
 foreign import present_Impl :: forall a . Table a -> Effect (Promise Unit)
 
-present_multiSelect :: forall a . Rowable a => Array a -> Aff (Array a)
-present_multiSelect as = present_multiSelect_Impl (toTable as) as # toAffE
+present_multiSelect :: forall a . Eq a => Rowable a => Array a -> Aff (Array a)
+present_multiSelect as = present_multiSelect_Impl (toTable as) as # toAffE >>> map nubEq
 
 foreign import present_multiSelect_Impl :: forall a . Table a -> Array a -> Effect (Promise (Array a))
 
