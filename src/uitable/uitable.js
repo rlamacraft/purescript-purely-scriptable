@@ -26,12 +26,13 @@ function presentAndReturnSelectedRows(matrix, rowData, selecting) {
     }
     
     return table.present().then(function() {
-	if(selecting === "single" || selecting === "many") {
+	if(selecting === "many") {
 	    return selected.map(function(index) {
 		return rowData[index];
 	    });
-	} else {
-	    return true;
+	}
+	if(selecting === "single") {
+	    return rowData[selected[0]];
 	}
     });
 }
