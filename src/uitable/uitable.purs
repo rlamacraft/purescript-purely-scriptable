@@ -2,7 +2,7 @@ module UITable (
   TextAlignment(..), Cell(..), ConfigurableNumber(..), ConfigurableColor(..), RowConfig(..), Row(..),
   Header(..), Table(..), class Rowable, rowable, defaultRow, header, headings, setBackgroundColor,
   text, singularString, deriveStringRow, centerAligned, leftAligned, rightAligned, 
-  present, present_singleSelect, present_multiSelect
+  present, present_singleSelect, present_multiSelect, toTable
   ) where
 
 import Color (Color)
@@ -71,7 +71,7 @@ defaultRow = Row {
 }
 
 setBackgroundColor :: Color -> RowConfig -> RowConfig
-setBAckgroundColor c r = r { backgroundColor = Just (toForeignConstructable c)}
+setBackgroundColor c r = r { backgroundColor = Just (toForeignConstructable c)}
 
 headings :: forall a . Array String -> Header a
 headings = map singularString >>> defaultRow >>> Header
