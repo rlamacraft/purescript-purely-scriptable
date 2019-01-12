@@ -1,6 +1,6 @@
 module UITable (
   TextAlignment(..), Cell(..), ConfigurableNumber(..), ConfigurableColor(..), RowConfig(..), Row(..),
-  Header(..), Table(..), class Rowable, rowable, defaultRow, header, headings,
+  Header(..), Table(..), class Rowable, rowable, defaultRow, header, headings, setBackgroundColor,
   text, singularString, deriveStringRow, centerAligned, leftAligned, rightAligned, 
   present, present_singleSelect, present_multiSelect
   ) where
@@ -16,6 +16,7 @@ import Data.Newtype (class Newtype, unwrap)
 import Data.Unit (Unit)
 import Effect (Effect)
 import Effect.Aff (Aff)
+import PurelyScriptable.Color (ForeignConstructableColor, toForeignConstructable)
 
 -----------------------
 -- UITableCell
@@ -48,7 +49,7 @@ rightAligned (Text title subtitle _) = Text title subtitle Right
 -----------------------
 
 type ConfigurableNumber = Maybe Number
-type ConfigurableColor = Maybe Color
+type ConfigurableColor = Maybe ForeignConstructableColor
 
 type RowConfig = {
   cellSpacing :: ConfigurableNumber,
@@ -68,6 +69,9 @@ defaultRow = Row {
   height : Nothing,
   backgroundColor : Nothing
 }
+
+setBackgroundColor :: Color -> RowConfig -> RowConfig
+setBAckgroundColor c r = r { backgroundColor = Just (toForeignConstructable c)}
 
 headings :: forall a . Array String -> Header a
 headings = map singularString >>> defaultRow >>> Header

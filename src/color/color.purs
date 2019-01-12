@@ -1,10 +1,10 @@
 module PurelyScriptable.Color (
-  newColor, a, r, g, b, hex,
+  newColor, ForeignConstructableColor(..), toForeignConstructable,
   black, blue, brown, clear, cyan, darkGray, gray, green,
   lightGray, magenta, orange, purple, red, white, yellow
   ) where
 
-import Color (Color, fromHexString, rgba, rgba', toHexString, toRGBA, toRGBA')
+import Color (Color, fromHexString, rgba, rgba', toHexString, toRGBA)
 import Data.Function ((#))
 import Data.Functor ((<#>))
 import Data.Maybe (Maybe)
@@ -16,20 +16,13 @@ setAlpha alpha c = rgba r g b alpha where
 newColor :: String -> Number -> Maybe Color
 newColor h alpha = fromHexString h <#> setAlpha alpha
 
-a :: Color -> Number
-a c = (toRGBA' c).a
+type ForeignConstructableColor = {
+  hex :: String,
+  alpha :: Number
+}
 
-r :: Color -> Number
-r c = (toRGBA' c).r
-
-g :: Color -> Number
-g c = (toRGBA' c).g
-
-b :: Color -> Number
-b c = (toRGBA' c).b
-
-hex :: Color -> String
-hex = toHexString
+toForeignConstructable :: Color -> ForeignConstructableColor
+toForeignConstructable c = {hex : toHexString c, alpha : (toRGBA c).a} 
 
 -----------------------
 -- Colors

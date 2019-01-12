@@ -12,6 +12,17 @@ function presentAndReturnSelectedRows(matrix, rowData, selecting) {
 	    }
 	    return row;
 	}, new UITableRow());
+
+	var row = new UITableRow();
+	if(rowConfig['cellSpacing'] !== {}) {
+	    row.cellSpacing = rowConfig['cellSpacing'];
+	}
+	if(rowConfig['height'] !== {}) {
+	    row.height = rowConfig['height'];
+	}
+	if(rowConfig['backgroundColor'] !== {}) {
+	    row.backgroundColor = new Color(rowConfig['backgroundColor'].hex, rowConfig['backgroundColor'].alpha);
+	}
 	
 	var rowData = matrix[i].value1;
 	for(var j = 0; j < rowData.length; j++) {
