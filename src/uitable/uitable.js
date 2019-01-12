@@ -18,9 +18,9 @@ function presentAndReturnSelectedRows(matrix, rowData, selecting) {
 	    row.backgroundColor = new Color(rowConfig['backgroundColor'].value0.hex, rowConfig['backgroundColor'].value0.alpha);
 	}
 	
-	var rowData = matrix[i].value1;
-	for(var j = 0; j < rowData.length; j++) {
-	    var cell = UITableCell.text(rowData[j].value0.value0, rowData[j].value1.value0);
+	var matrixRow = matrix[i].value1;
+	for(var j = 0; j < matrixRow.length; j++) {
+	    var cell = UITableCell.text(matrixRow[j].value0.value0, matrixRow[j].value1.value0);
 	    row.addCell(cell);
 	}
 
