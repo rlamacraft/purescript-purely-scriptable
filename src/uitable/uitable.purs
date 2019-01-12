@@ -1,9 +1,11 @@
 module UITable (
-  TextAlignment(..), Cell(..), Row(..), Header(..), Table(..), class Rowable, rowable, header, headings,
+  TextAlignment(..), Cell(..), ConfigurableNumber(..), ConfigurableColor(..), RowConfig(..), Row(..),
+  Header(..), Table(..), class Rowable, rowable, defaultRow, header, headings,
   text, singularString, deriveStringRow, centerAligned, leftAligned, rightAligned, 
   present, present_singleSelect, present_multiSelect
   ) where
 
+import Color (Color)
 import Control.Promise (Promise, toAffE)
 import Data.Array (nubEq, singleton)
 import Data.Eq (class Eq)
@@ -45,14 +47,30 @@ rightAligned (Text title subtitle _) = Text title subtitle Right
 -- UITableRow
 -----------------------
 
-newtype Row a = Row (Array Cell)
+type ConfigurableNumber = Maybe Number
+type ConfigurableColor = Maybe Color
+
+type RowConfig = {
+  cellSpacing :: ConfigurableNumber,
+  height :: ConfigurableNumber,
+  backgroundColor :: ConfigurableColor
+}
+
+data Row a = Row RowConfig (Array Cell)
 derive instance eqRow :: Eq (Row a)
 
 newtype Header a = Header (Row a)
 derive instance eqHeader :: Eq (Header a)
 
+defaultRow :: forall a . Array Cell -> Row a
+defaultRow = Row {
+  cellSpacing : Nothing,
+  height : Nothing,
+  backgroundColor : Nothing
+}
+
 headings :: forall a . Array String -> Header a
-headings = map singularString >>> Row >>> Header
+headings = map singularString >>> defaultRow >>> Header
 
 -----------------------
 -- UITable
@@ -66,7 +84,7 @@ class Rowable a where
   header :: Header a
 
 deriveStringRow :: forall a . Newtype a String => a -> Row a
-deriveStringRow = unwrap >>> singularString >>> singleton >>> Row
+deriveStringRow = unwrap >>> singularString >>> singleton >>> defaultRow
 
 toTable :: forall a . Rowable a => Array a -> Table a
 toTable = map rowable >>> Table (Just header)

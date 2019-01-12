@@ -1,12 +1,21 @@
 "use strict";
 
 function presentAndReturnSelectedRows(matrix, rowData, selecting) {
+    var rowConfigKeys = ['cellSpacing', 'height', 'backgroundColor'];
     var selected = [];
     var table = new UITable();
     for(var i = 0; i < matrix.length; i++) {
-	var row = new UITableRow();
-	for(var j = 0; j < matrix[i].length; j++) {
-	    var cell = UITableCell.text(matrix[i][j].value0.value0, matrix[i][j].value1.value0);
+	var rowConfig = matrix[i].value0;
+	var row = rowConfigKeys.reduce(function(row, key) {
+	    if(rowConfig[key] !== {}) {
+		row[key] = rowConfig[key].value0;
+	    }
+	    return row;
+	}, new UITableRow());
+	
+	var rowData = matrix[i].value1;
+	for(var j = 0; j < rowData.length; j++) {
+	    var cell = UITableCell.text(rowData[j].value0.value0, rowData[j].value1.value0);
 	    row.addCell(cell);
 	}
 
