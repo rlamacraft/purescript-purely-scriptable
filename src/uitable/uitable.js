@@ -6,22 +6,16 @@ function presentAndReturnSelectedRows(matrix, rowData, selecting) {
     var table = new UITable();
     for(var i = 0; i < matrix.length; i++) {
 	var rowConfig = matrix[i].value0;
-	var row = rowConfigKeys.reduce(function(row, key) {
-	    if(rowConfig[key] !== {}) {
-		row[key] = rowConfig[key].value0;
-	    }
-	    return row;
-	}, new UITableRow());
 
 	var row = new UITableRow();
-	if(rowConfig['cellSpacing'] !== {}) {
+	if(Object.keys(rowConfig['cellSpacing']).length > 0) {
 	    row.cellSpacing = rowConfig['cellSpacing'];
 	}
-	if(rowConfig['height'] !== {}) {
+	if(Object.keys(rowConfig['height']).length > 0) {
 	    row.height = rowConfig['height'];
 	}
-	if(rowConfig['backgroundColor'] !== {}) {
-	    row.backgroundColor = new Color(rowConfig['backgroundColor'].hex, rowConfig['backgroundColor'].alpha);
+	if(Object.keys(rowConfig['backgroundColor']).length > 0) {
+	    row.backgroundColor = new Color(rowConfig['backgroundColor'].value0.hex, rowConfig['backgroundColor'].value0.alpha);
 	}
 	
 	var rowData = matrix[i].value1;
