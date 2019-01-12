@@ -1,4 +1,4 @@
-module UITable (
+module PurelyScriptable.UITable (
   TextAlignment(..), Cell(..), ConfigurableNumber(..), ConfigurableColor(..), RowConfig(..), Row(..),
   Header(..), Table(..), class Rowable, rowable, defaultRow, header, headings, backgroundColor,
   text, singularString, deriveStringRow, centerAligned, leftAligned, rightAligned, 
