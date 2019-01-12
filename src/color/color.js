@@ -1,61 +1,31 @@
 "use strict";
 
-exports.black_Impl = function() {
-    return Color.black();
-}
+exports.black_Impl = Color.black();
 
-exports.blue_Impl = function() {
-    return Color.blue();
-}
+exports.blue_Impl = Color.blue();
 
-exports.brown_Impl = function() {
-    return Color.brown();
-}
+exports.brown_Impl = Color.brown();
 
-exports.clear_Impl = function() {
-    return Color.clear();
-}
+exports.clear_Impl = Color.clear();
 
-exports.cyan_Impl = function() {
-    return Color.cyan();
-}
+exports.cyan_Impl = Color.cyan();
 
-exports.darkGray_Impl = function() {
-    return Color.darkGray();
-}
+exports.darkGray_Impl = Color.darkGray();
 
-exports.gray_Impl = function() {
-    return Color.gray();
-}
+exports.gray_Impl = Color.gray();
 
-exports.green_Impl = function() {
-    return Color.green();
-}
+exports.green_Impl = Color.green();
 
-exports.lightGray_Impl = function() {
-    return Color.lightGray();
-}
+exports.lightGray_Impl = Color.lightGray();
 
-exports.magenta_Impl = function() {
-    return Color.magenta();
-}
+exports.magenta_Impl = Color.magenta();
 
-exports.orange_Impl = function() {
-    return Color.orange();
-}
+exports.orange_Impl = Color.orange();
 
-exports.purple_Impl = function() {
-    return Color.purple();
-}
+exports.purple_Impl = Color.purple();
 
-exports.red_Impl = function() {
-    return Color.red();
-}
+exports.red_Impl = Color.red();
 
-exports.white_Impl = function() {
-    return Color.white();
-}
+exports.white_Impl = Color.white();
 
-exports.yellow_Impl = function() {
-    return Color.yellow();
-}
+exports.yellow_Impl = Color.yellow();
