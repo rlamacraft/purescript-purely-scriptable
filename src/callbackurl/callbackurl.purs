@@ -1,4 +1,4 @@
-module CallbackURL (
+module PurelyScriptable.CallbackURL (
   CallbackURL, URLParameters, URLParameter,
   getURL, newCallbackURL, addParameter, open
 ) where
