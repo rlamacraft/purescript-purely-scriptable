@@ -5,14 +5,8 @@ module PurelyScriptable.CallbackURL (
 
 import Control.Promise (Promise, toAffE)
 import Control.Semigroupoid ((>>>))
-import Data.Array (null, (:))
+import Data.Array ((:))
 import Data.Either (Either)
-import Data.Bifoldable (bifoldMap)
-import Data.Foldable (intercalate)
-import Data.Function ((#))
-import Data.Functor ((<#>))
-import Data.Monoid(mempty)
-import Data.Semigroup (append, (<>))
 import Data.Tuple (Tuple(..))
 import Effect (Effect)
 import Effect.Aff (Aff, attempt)
@@ -37,12 +31,12 @@ addParameter :: String -> String -> CallbackURL -> CallbackURL
 addParameter key value cb = cb {parameters = (Tuple key value) : cb.parameters}
 
 getURL :: CallbackURL -> String
-getURL c = c.target <> "://x-callback-url/" <> c.action <> joiner <> params where
-  params = c.parameters <#> (bifoldMap (append mempty) (append "=")) # intercalate "&"
-  joiner = if null c.parameters then "" else "?"
+getURL = getURL_Impl
+
+foreign import getURL_Impl :: CallbackURL -> String
 
 open :: CallbackURL -> Aff (Either Error String)
-open = openImpl >>> toAffE >>> attempt
+open = open_Impl >>> toAffE >>> attempt
 
-foreign import openImpl :: CallbackURL -> Effect (Promise String)
+foreign import open_Impl :: CallbackURL -> Effect (Promise String)
 
