@@ -5,7 +5,8 @@
 module PurelyScriptable.Request
   ( Request(..)
   , URL
-  , Method
+  , Body
+  , Method(..)
   , Header
   , Headers
   , loadString
