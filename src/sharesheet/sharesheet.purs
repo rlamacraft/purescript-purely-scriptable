@@ -1,4 +1,12 @@
-module ShareSheet (Activity, present, presentMultiple) where
+-- | This module abstracts over the Scriptable `ShareSheer` APIs.
+-- |
+-- | For interfacing with the iOS ShareSheet.
+
+module PurelyScriptable.ShareSheet
+  ( Activity
+  , present
+  , presentMultiple
+  ) where
 
 import Control.Promise (Promise, toAffE)
 import Control.Semigroupoid ((>>>))

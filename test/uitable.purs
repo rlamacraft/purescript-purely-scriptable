@@ -10,7 +10,8 @@ import Data.Show (show)
 import Data.Unit (Unit)
 import Test.Unit (suite, test, TestF)
 import Test.Unit.Assert (assert)
-import UITable (class Rowable, Cell(..), Header(..), Table(..), TextAlignment(..), defaultRow, deriveStringRow, headings, rowable, singularString, toTable)
+import PurelyScriptable.UITable (class Rowable, Cell(..), Header(..), Table(..), TextAlignment(..), 
+defaultRow, deriveStringRow, headings, rowable, singularString, toTable)
 
 testUITable :: Free TestF Unit
 testUITable = suite "UITable" do

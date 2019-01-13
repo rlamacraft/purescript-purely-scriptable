@@ -1,7 +1,28 @@
-module PurelyScriptable.Color (
-  newColor, ForeignConstructableColor(..), toForeignConstructable,
-  black, blue, brown, clear, cyan, darkGray, gray, green,
-  lightGray, magenta, orange, purple, red, white, yellow
+-- | This module abstracts over the Scriptable `Color` APIs.
+-- |
+-- | Provides a mechanism for using the purescript-colors library,
+-- | wherever Scriptable Colors are used.
+
+module PurelyScriptable.Color
+  ( ForeignConstructableColor(..)
+  , newColor
+  , toForeignConstructable
+  -- Specified Colors
+  , black
+  , blue
+  , brown
+  , clear
+  , cyan
+  , darkGray
+  , gray
+  , green
+  , lightGray
+  , magenta
+  , orange
+  , purple
+  , red
+  , white
+  , yellow
   ) where
 
 import Color (Color, fromHexString, rgba, rgba', toHexString, toRGBA)
@@ -23,10 +44,6 @@ type ForeignConstructableColor = {
 
 toForeignConstructable :: Color -> ForeignConstructableColor
 toForeignConstructable c = {hex : toHexString c, alpha : (toRGBA c).a} 
-
------------------------
--- Colors
------------------------
 
 type ForeignColor = {
   alpha :: Number,

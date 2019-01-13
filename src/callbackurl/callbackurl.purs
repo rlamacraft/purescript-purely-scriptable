@@ -1,7 +1,16 @@
-module PurelyScriptable.CallbackURL (
-  CallbackURL, URLParameters, URLParameter,
-  getURL, newCallbackURL, addParameter, open
-) where
+-- | This module abstracts over the Scriptable `CallbackURL` APIs.
+-- |
+-- | For interfacing with other apps using the Callback URL standard.
+
+module PurelyScriptable.CallbackURL
+  ( CallbackURL
+  , URLParameters
+  , URLParameter
+  , getURL
+  , newCallbackURL
+  , addParameter
+  , open
+  ) where
 
 import Control.Promise (Promise, toAffE)
 import Control.Semigroupoid ((>>>))

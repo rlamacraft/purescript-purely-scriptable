@@ -1,10 +1,35 @@
-module FileManager(
-  FileManager, iCloud, local,
-  Path, Directory, joinPath, appendPathAsString, (/), root,
-  documentDirectory, libraryDirectory, temporaryDirectory, isDirectory, listContents,
-  FilePath(..), FileName, FileExtension, filePath,
-  fileNameAsString, fileExtensionAsString, fileExists,
-  readString, writeString
+-- | This module abstracts over the Scriptable `FileManager` APIs.
+-- |
+-- | Provides basic file IO.
+
+module PurelyScriptable.FileManager
+  ( FileManager
+  , Path
+  , Directory
+  , FilePath(..)
+  , FileName
+  , FileExtension
+  -- Path construction
+  , joinPath
+  , appendPathAsString
+  , (/)
+  , root
+  -- FileManager APIs
+  , iCloud
+  , local
+  -- Directory APIs
+  , documentDirectory
+  , libraryDirectory
+  , temporaryDirectory
+  , isDirectory
+  , listContents
+  , filePath
+  , fileNameAsString
+  , fileExtensionAsString
+  , fileExists
+  -- IO APIs
+  , readString
+  , writeString
   ) where
 
 import Control.Semigroupoid ((>>>))
@@ -21,10 +46,6 @@ import Data.String.Common (split)
 import Data.String.Pattern (Pattern(..))
 import Data.Unit (Unit)
 import Effect (Effect)
-
------------------------
--- Path
------------------------
 
 newtype Directory = Directory String
 derive instance newtypeDirectory :: Newtype Directory _
@@ -73,10 +94,6 @@ infixl 9 appendPathAsString as /
 root :: Path
 root = Path mempty
 
------------------------
--- FileManager APIs
------------------------
-
 data FileManager
   = Icloud
   | Local
@@ -90,10 +107,6 @@ local = Local
 fileManagerName :: FileManager -> String
 fileManagerName Icloud = "iCloud"
 fileManagerName Local = "local"
-
------------------------
--- Directory APIs
------------------------
 
 documentDirectory :: FileManager -> Effect Path
 documentDirectory = documentDirectory_Impl >>> map toPath
@@ -120,10 +133,6 @@ listContents fm path = listContents_Impl (fileManagerName fm) (fromPath path)
                                 <#> List.fromFoldable >>> map toPath
 
 foreign import listContents_Impl :: String -> String -> Effect (Array String)
-
------------------------
--- File APIs
------------------------
 
 newtype FileName = FileName String
 derive instance newtypeFilename :: Newtype FileName _
@@ -152,10 +161,6 @@ fileExists :: FileManager -> FilePath -> Effect Boolean
 fileExists fm path = fileExists_Impl (fileManagerName fm) (show path)
 
 foreign import fileExists_Impl :: String -> String -> Effect Boolean
-
------------------------
--- Plain Text APIs
------------------------
 
 readString :: FileManager -> FilePath -> Effect String
 readString fm path = readString_Impl (fileManagerName fm) (show path)

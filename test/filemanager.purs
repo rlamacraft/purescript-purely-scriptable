@@ -7,8 +7,7 @@ import Data.Function (($))
 import Data.Monoid (mempty)
 import Data.Semigroup ((<>))
 import Data.Unit (Unit)
-
-import FileManager (joinPath, root, (/), filePath, fileNameAsString, fileExtensionAsString)
+import PurelyScriptable.FileManager (joinPath, root, (/), filePath, fileNameAsString, fileExtensionAsString)
 import Test.Unit (suite, test, TestF)
 import Test.Unit.Assert (assert)
 

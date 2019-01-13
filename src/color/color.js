@@ -1,31 +1,45 @@
 "use strict";
 
-exports.black_Impl = Color.black();
+// provide dummy value outside Scriptable runtime, e.g. pulp test
+function safeColor(colorName) {
+    if(typeof(Color) !== "undefined") {
+	return Color[colorName]();
+    } else {
+	return {
+	    red: 0,
+	    green: 0,
+	    blue: 0,
+	    alpha: 0
+	};
+    }
+}
 
-exports.blue_Impl = Color.blue();
+exports.black_Impl = safeColor('black');
 
-exports.brown_Impl = Color.brown();
+exports.blue_Impl = safeColor('blue');
 
-exports.clear_Impl = Color.clear();
+exports.brown_Impl = safeColor('brown');
 
-exports.cyan_Impl = Color.cyan();
+exports.clear_Impl = safeColor('clear');
 
-exports.darkGray_Impl = Color.darkGray();
+exports.cyan_Impl = safeColor('cyan');
 
-exports.gray_Impl = Color.gray();
+exports.darkGray_Impl = safeColor('darkGray');
 
-exports.green_Impl = Color.green();
+exports.gray_Impl = safeColor('gray');
 
-exports.lightGray_Impl = Color.lightGray();
+exports.green_Impl = safeColor('green');
 
-exports.magenta_Impl = Color.magenta();
+exports.lightGray_Impl = safeColor('lightGray');
 
-exports.orange_Impl = Color.orange();
+exports.magenta_Impl = safeColor('magenta');
 
-exports.purple_Impl = Color.purple();
+exports.orange_Impl = safeColor('orange');
 
-exports.red_Impl = Color.red();
+exports.purple_Impl = safeColor('purple');
 
-exports.white_Impl = Color.white();
+exports.red_Impl = safeColor('red');
 
-exports.yellow_Impl = Color.yellow();
+exports.white_Impl = safeColor('white');
+
+exports.yellow_Impl = safeColor('yellow');

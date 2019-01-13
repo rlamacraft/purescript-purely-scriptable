@@ -1,6 +1,38 @@
-module PurelyScriptable.Alert (newAlert, presentAlert, setMessage, setTitle, addAction, addActions, Alert,
-                               Button(..), TextField(..), addTextField, AlertResult(..), textFieldValue,
-                               unsafeTextFieldValue, class Ask, ask, askIfNothing, present, closeButton, displayString, Close(..), askForString) where
+-- | This module abstracts over the Scriptable `Alert` APIs.
+-- |
+-- | Modal alerts can be constructed and presented, including both buttons and textfields.
+-- |
+-- | This module also provides a mechanism for defining a standard alert for requesting data
+-- | from a user to instantiate a given type. The Ask type class provides this mechanism and
+-- | is implemented for Strings. This abstraction allows for default instantiations of types,
+-- | in the event of a Maybe's Nothing case, with the user providing the necessary data.
+
+module PurelyScriptable.Alert
+  ( Alert
+  , Button(..)
+  , TextField(..)
+  , AlertResult(..)
+  , Close(..)
+  -- Constructors
+  , newAlert
+  , presentAlert
+  , setMessage
+  , setTitle
+  , addAction
+  , addActions
+  , addTextField
+  , closeButton
+  -- Presenting
+  , present
+  , textFieldValue
+  , unsafeTextFieldValue
+  -- Ask
+  , class Ask
+  , ask
+  , askIfNothing
+  , displayString
+  , askForString
+  ) where
 
 import Control.Applicative (pure)
 import Control.Promise (Promise, toAffE)
@@ -34,10 +66,6 @@ type TextField = {
   placeholder :: Maybe String,
   text :: Maybe String
 }
-
------------------------
--- Alert API
------------------------
 
 newAlert :: forall b . Alert b
 newAlert = {
@@ -76,10 +104,6 @@ textFieldValue i (Result _ textFieldValues) = index textFieldValues i
 unsafeTextFieldValue :: forall b . Partial => Int -> AlertResult b -> String
 unsafeTextFieldValue i (Result _ textFieldValues) = unsafeIndex textFieldValues i
 
------------------------
--- Helpers
------------------------
-
 data Close = Close
 
 instance showClose :: Show Close where
@@ -92,10 +116,6 @@ displayString :: String -> Aff (AlertResult Close)
 displayString str = newAlert # setTitle str
                     >>> addAction closeButton
                     >>> presentAlert
-
------------------------
--- Ask
------------------------
 
 class Ask a where
   ask :: String -> Aff a

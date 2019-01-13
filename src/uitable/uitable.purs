@@ -1,8 +1,36 @@
-module PurelyScriptable.UITable (
-  TextAlignment(..), Cell(..), ConfigurableNumber(..), ConfigurableColor(..), RowConfig(..), Row(..),
-  Header(..), Table(..), class Rowable, rowable, defaultRow, header, headings, backgroundColor,
-  text, singularString, deriveStringRow, centerAligned, leftAligned, rightAligned, 
-  present, present_singleSelect, present_multiSelect, toTable
+-- | This module abstracts over the Scriptable `UITable`,
+-- | `UITableRow`, and `UITableCell` APIs.
+-- |
+-- | For displaying interactable tables.
+
+module PurelyScriptable.UITable
+  ( TextAlignment(..)
+  , Cell(..)
+  , ConfigurableNumber(..)
+  , ConfigurableColor(..)
+  , RowConfig(..)
+  , Row(..)
+  , Header(..)
+  , Table(..)
+  -- UIRow APIs
+  , class Rowable
+  , rowable
+  , defaultRow
+  , header
+  , headings
+  , backgroundColor
+  -- UICell APIs
+  , text
+  , singularString
+  , deriveStringRow
+  , centerAligned
+  , leftAligned
+  , rightAligned
+  -- UITable APIs
+  , toTable
+  , present
+  , present_singleSelect
+  , present_multiSelect
   ) where
 
 import Color (Color)
@@ -17,10 +45,6 @@ import Data.Unit (Unit)
 import Effect (Effect)
 import Effect.Aff (Aff)
 import PurelyScriptable.Color (ForeignConstructableColor, toForeignConstructable)
-
------------------------
--- UITableCell
------------------------
 
 data TextAlignment = Left | Center | Right
 derive instance eqTextAlignment :: Eq TextAlignment
@@ -43,10 +67,6 @@ leftAligned (Text title subtitle _) = Text title subtitle Left
 
 rightAligned :: Cell -> Cell
 rightAligned (Text title subtitle _) = Text title subtitle Right
-
------------------------
--- UITableRow
------------------------
 
 type ConfigurableNumber = Maybe Number
 type ConfigurableColor = Maybe ForeignConstructableColor
@@ -75,10 +95,6 @@ backgroundColor = toForeignConstructable >>> Just
 
 headings :: forall a . Array String -> Header a
 headings = map singularString >>> defaultRow >>> Header
-
------------------------
--- UITable
------------------------
 
 data Table a = Table (Maybe (Header a)) (Array (Row a))
 derive instance eqTable :: Eq (Table a)
