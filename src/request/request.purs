@@ -13,16 +13,21 @@ module PurelyScriptable.Request
   , loadJSON
   , get
   , loadDecodable
+  , collapseEither
   ) where
 
+import Control.Applicative (pure)
+import Control.Bind (bindFlipped)
 import Control.Promise (Promise, toAffE)
 import Data.Argonaut (class DecodeJson, Json, decodeJson)
-import Data.Either (Either)
-import Data.Function (const, (#), (>>>))
+import Data.Either (Either, either)
+import Data.Function (const, (#), ($), (>>>))
 import Data.Functor (map)
 import Data.Tuple (Tuple)
 import Effect (Effect)
 import Effect.Aff (Aff)
+import Effect.Class (liftEffect)
+import Effect.Exception (throw)
 
 type URL = String
 type Body = String
@@ -55,8 +60,11 @@ loadJSON (Request headers m url) = loadJSON_Impl url (methodToString m) (bodyToS
 
 foreign import loadJSON_Impl :: URL -> String -> Body -> Headers -> Effect (Promise Json)
 
-loadDecodable :: forall a . DecodeJson a => Request -> Aff (Either String a)
-loadDecodable = loadJSON >>> map decodeJson
+loadDecodable :: forall a . DecodeJson a => Request -> Aff a
+loadDecodable = loadJSON >>> map decodeJson >>> collapseEither
 
 get :: URL -> Request
 get = Request [] GET
+
+collapseEither :: forall a . Aff (Either String a) -> Aff a
+collapseEither = bindFlipped $ either (throw >>> liftEffect) pure
