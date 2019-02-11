@@ -1,15 +1,24 @@
 "use strict";
 
-exports.documentsDirectory_Impl = function(fileManager) {
-    return fileManager.documentsDirectory();
+exports.documentsDirectory_Impl = function(fileManagerName) {
+    var fileManager = fileManagerFromName(fileManagerName);
+    return function() {
+	return fileManager.documentsDirectory();
+    }
 }
 
-exports.libraryDirectory_Impl = function(fileManager) {
-    return fileManager.libraryDirectory();    
+exports.libraryDirectory_Impl = function(fileManagerName) {
+    var fileManager = fileManagerFromName(fileManagerName);
+    return function() {
+	return fileManager.libraryDirectory();
+    }
 }
 
-exports.temporaryDirectory_Impl = function(fileManager) {
-    return fileManager.temporaryDirectory();
+exports.temporaryDirectory_Impl = function(fileManagerName) {
+    var fileManager = fileManagerFromName(fileManagerName);
+    return function() {
+	return fileManager.temporaryDirectory();
+    }
 }
 
 function fileManagerFromName(fileManagerName) {
@@ -25,28 +34,36 @@ function fileManagerFromName(fileManagerName) {
 exports.isDirectory_Impl = function(fileManagerName) {
     const fileManager = fileManagerFromName(fileManagerName);
     return function(path) {
-	return fileManager.isDirectory(path);
+	return function() {
+	    return fileManager.isDirectory(path);
+	}
     }
 }
 
 exports.listContents_Impl = function(fileManagerName) {
     const fileManager = fileManagerFromName(fileManagerName);
     return function(path) {
-	return fileManager.listContents(path);
+	return function() {
+	    return fileManager.listContents(path);
+	}
     }
 }
 
 exports.fileExists_Impl = function(fileManagerName) {
     const fileManager = fileManagerFromName(fileManagerName);
     return function(filePath) {
-	return fileManager.fileExists(filePath);
+	return function() {
+	    return fileManager.fileExists(filePath);
+	}
     }
 }
 
 exports.readString_Impl = function(fileManagerName) {
     const fileManager = fileManagerFromName(fileManagerName);
     return function(filePath) {
-	return fileManager.readString(filePath);
+	return function() {
+	    return fileManager.readString(filePath);
+	}
     }
 }
 
@@ -54,7 +71,9 @@ exports.writeString_Impl = function(fileManagerName) {
     const fileManager = fileManagerFromName(fileManagerName);
     return function(filePath) {
 	return function(content) {
-	    fileManager.writeString(filePath, content);
+	    return function() {
+		fileManager.writeString(filePath, content);
+	    }
 	}
     }
 }

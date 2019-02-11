@@ -109,19 +109,19 @@ fileManagerName Icloud = "iCloud"
 fileManagerName Local = "local"
 
 documentsDirectory :: FileManager -> Effect Path
-documentsDirectory = documentsDirectory_Impl >>> map toPath
+documentsDirectory = fileManagerName >>> documentsDirectory_Impl >>> map toPath
 
-foreign import documentsDirectory_Impl :: FileManager -> Effect String
+foreign import documentsDirectory_Impl :: String -> Effect String
 
 libraryDirectory :: FileManager -> Effect Path
-libraryDirectory = libraryDirectory_Impl >>> map toPath
+libraryDirectory = fileManagerName >>> libraryDirectory_Impl >>> map toPath
 
-foreign import libraryDirectory_Impl :: FileManager -> Effect String
+foreign import libraryDirectory_Impl :: String -> Effect String
 
 temporaryDirectory :: FileManager -> Effect Path
-temporaryDirectory = temporaryDirectory_Impl >>> map toPath
+temporaryDirectory = fileManagerName >>> temporaryDirectory_Impl >>> map toPath
 
-foreign import temporaryDirectory_Impl :: FileManager -> Effect String
+foreign import temporaryDirectory_Impl :: String -> Effect String
 
 isDirectory :: FileManager -> Path -> Effect Boolean
 isDirectory fm path = isDirectory_Impl (fileManagerName fm) (fromPath path)
