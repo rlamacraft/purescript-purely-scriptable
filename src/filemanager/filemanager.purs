@@ -18,7 +18,7 @@ module PurelyScriptable.FileManager
   , iCloud
   , local
   -- Directory APIs
-  , documentDirectory
+  , documentsDirectory
   , libraryDirectory
   , temporaryDirectory
   , isDirectory
@@ -108,10 +108,10 @@ fileManagerName :: FileManager -> String
 fileManagerName Icloud = "iCloud"
 fileManagerName Local = "local"
 
-documentDirectory :: FileManager -> Effect Path
-documentDirectory = documentDirectory_Impl >>> map toPath
+documentsDirectory :: FileManager -> Effect Path
+documentsDirectory = documentsDirectory_Impl >>> map toPath
 
-foreign import documentDirectory_Impl :: FileManager -> Effect String
+foreign import documentsDirectory_Impl :: FileManager -> Effect String
 
 libraryDirectory :: FileManager -> Effect Path
 libraryDirectory = libraryDirectory_Impl >>> map toPath

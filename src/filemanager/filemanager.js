@@ -1,7 +1,7 @@
 "use strict";
 
-exports.documentDirectory_Impl = function(fileManager) {
-    return fileManager.documentDirectory();
+exports.documentsDirectory_Impl = function(fileManager) {
+    return fileManager.documentsDirectory();
 }
 
 exports.libraryDirectory_Impl = function(fileManager) {
