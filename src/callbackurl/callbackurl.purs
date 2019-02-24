@@ -10,16 +10,18 @@ module PurelyScriptable.CallbackURL
   , newCallbackURL
   , addParameter
   , open
+  , openDecodable
   ) where
 
 import Control.Promise (Promise, toAffE)
 import Control.Semigroupoid ((>>>))
+import Data.Argonaut (class DecodeJson, decodeJson, fromString)
 import Data.Array ((:))
-import Data.Either (Either)
+import Data.Functor (map)
 import Data.Tuple (Tuple(..))
 import Effect (Effect)
-import Effect.Aff (Aff, attempt)
-import Effect.Exception (Error)
+import Effect.Aff (Aff)
+import PurelyScriptable.Common (collapseEither)
 
 type URLParameter = Tuple String String
 type URLParameters = Array URLParameter
@@ -44,8 +46,10 @@ getURL = getURL_Impl
 
 foreign import getURL_Impl :: CallbackURL -> String
 
-open :: CallbackURL -> Aff (Either Error String)
-open = open_Impl >>> toAffE >>> attempt
+open :: CallbackURL -> Aff String
+open = open_Impl >>> toAffE
 
 foreign import open_Impl :: CallbackURL -> Effect (Promise String)
 
+openDecodable :: forall a . DecodeJson a => CallbackURL -> Aff a
+openDecodable = open_Impl >>> toAffE >>> map (fromString >>> decodeJson) >>> collapseEither
