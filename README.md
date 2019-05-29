@@ -33,14 +33,15 @@ main = run $ do
 
 ## Getting Started & Hello World
 
-1.  Create a PureScript project with `pulp init`
-2.  Install purescript-purely-scriptable
+1.  Checkout this repo in some directory, REPO, and then navigate to the desired project directory.
+2.  Create a PureScript project with `pulp init`.
+3.  Install purescript-purely-scriptable
     1.  Add the following as a dependency in bower.json
         ```
         "purescript-purely-scriptable": "git://github.com/rlamacraft/purescript-purely-scriptable#v0.1.2"
         ```
     2.  Run `bower update` and `pulp build` to make sure everything works
-3.  Write the Hello World program to src/Main.purs
+4.  Write the Hello World program to src/Main.purs
     ```purescript
     module Main where
 
@@ -54,12 +55,12 @@ main = run $ do
     main = run $ do
       displayString "Hello, World!"
     ```
-4.  Compile
+5.  Compile
     1.  First run `pulp build` to check for anything obvious
     2.  When happy, build and deploy to iOS with the following
         ```bash
-        bash ~/Documents/GitHub/purescript-purely-scriptable/scripts/build.sh helloWorld
+        . $REPO/scripts/build.sh helloWorld
         ```
         This will copy the compiled JavaScript file to `~/Library/Mobile\ Documents/iCloud~dk~simonbs~Scriptable/Documents/`, the default location of the Scriptable iCloud directory.
-5.  Execute
+6.  Execute
     Wait for iCloud to sync, and then execute from the Scriptable iOS app.
