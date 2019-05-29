@@ -24,9 +24,42 @@ showOptionAlert = newAlert # setTitle "Count what?"
                     >>> presentAlert
 
 main :: Effect Unit
-main = launchAff_ $ do
+main = run $ do
   Result (Button option) _ <- showOptionAlert
   ArgsText text <- askIfNothing "No text passed from share sheet. Paste here instead." $ head argsText
   let pattern = optionToSplitPattern option
   split pattern text # length >>> show >>> displayString
 ```
+
+## Getting Started & Hello World
+
+1.  Create a PureScript project with `pulp init`
+2.  Install purescript-purely-scriptable
+   1.   Add the following as a dependency in bower.json
+        ```
+        "purescript-purely-scriptable": "git://github.com/rlamacraft/purescript-purely-scriptable#v0.1.2"
+        ```
+    2.  Run `bower update` and `pulp build` to make sure everything works
+3.  Write the Hello World program to src/Main.purs
+    ```purescript
+    module Main where
+
+    import Prelude
+    import Effect (Effect)
+
+    import PurelyScriptable (run)
+    import PurelyScriptable.Alert (displayString)
+
+    main :: Effect Unit
+    main = run $ do
+      displayString "Hello, World!"
+    ```
+4.  Compile
+   1.   First run `pulp build` to check for anything obvious
+   2.   When happy, build and deploy to iOS with the following
+        ```bash
+        bash ~/Documents/GitHub/purescript-purely-scriptable/scripts/build.sh helloWorld
+        ```
+        This will copy the compiled JavaScript file to `~/Library/Mobile\ Documents/iCloud~dk~simonbs~Scriptable/Documents/`, the default location of the Scriptable iCloud directory.
+5.  Execute
+    Wait for iCloud to sync, and then execute from the Scriptable iOS app.
