@@ -62,5 +62,4 @@ main = run $ do
         . $REPO/scripts/build.sh helloWorld
         ```
         This will copy the compiled JavaScript file to `~/Library/Mobile\ Documents/iCloud~dk~simonbs~Scriptable/Documents/`, the default location of the Scriptable iCloud directory.
-6.  Execute
-    Wait for iCloud to sync, and then execute from the Scriptable iOS app.
+6.  Wait for iCloud to sync, and then execute from the Scriptable iOS app.
