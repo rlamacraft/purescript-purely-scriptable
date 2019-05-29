@@ -35,7 +35,7 @@ main = run $ do
 
 1.  Create a PureScript project with `pulp init`
 2.  Install purescript-purely-scriptable
-   1.   Add the following as a dependency in bower.json
+    1.  Add the following as a dependency in bower.json
         ```
         "purescript-purely-scriptable": "git://github.com/rlamacraft/purescript-purely-scriptable#v0.1.2"
         ```
@@ -55,8 +55,8 @@ main = run $ do
       displayString "Hello, World!"
     ```
 4.  Compile
-   1.   First run `pulp build` to check for anything obvious
-   2.   When happy, build and deploy to iOS with the following
+    1.  First run `pulp build` to check for anything obvious
+    2.  When happy, build and deploy to iOS with the following
         ```bash
         bash ~/Documents/GitHub/purescript-purely-scriptable/scripts/build.sh helloWorld
         ```
